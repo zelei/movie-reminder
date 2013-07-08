@@ -1,0 +1,71 @@
+<% extend 'templates/default.ect' %>
+
+<% block 'javascript' : %>
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+   <script src="client/SearchWebController.js"></script>
+   <script src="client/UpcomingWebController.js"></script>
+<% end %>
+
+<% block 'body' : %>
+    
+   
+    
+        <div class="masthead">
+            <ul class="nav nav-pills pull-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <h2 class="muted">Project name</h2>
+        </div>
+    
+        <hr>
+    
+        <div class="jumbotron">
+            <h1>Super awesome shit!</h1>
+            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <a class="btn btn-large btn-success" href="#">Sign up today</a>
+        </div>
+    
+        <hr>
+
+         
+        <div class="row">
+            <div class="span9">
+                <div class="row">
+                    <div class="span4" ng-controller="SearchWebController">
+                    
+                        <form class="form-search" ng-submit="search()">
+                            <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-medium search-query">
+                            <button type="submit" class="btn">Search</button>
+                        </form>
+                    
+                    
+                        <ul class="unstyled search-list">
+                            <li ng-repeat="movie in movies">
+                                <div class="media">
+                        			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}"  style="width: 60px; height: 90px;">
+                    				<h4>{{movie.title}}</h4>
+                                </div>
+                            </li>    
+                        </ul>
+                    
+                    </div>  
+                
+                    <div class="span5 upcoming-list" ng-controller="UpcomingWebController">
+                        <ul class="unstyled">
+                            <li ng-repeat="movie in movies">
+                                <div class="media">
+                    				<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}"  style="width: 60px; height: 90px;">
+                    				<h4>{{movie.title}} - <i>({{movie.release_dates}})</i></h4>             
+                                    <p>{{movie.synopsis}}</p>
+                                </div>
+                            </li>    
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+<% end %>
