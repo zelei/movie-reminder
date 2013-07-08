@@ -12,5 +12,9 @@
     "rekuire": "0.0.10",
     "memory-cache": "0.0.5"
   },
-  "main": "/server"
+ "scripts": {
+    "start": "node ./server",
+    "predeploy": "echo This will be run before deploying the app",
+    "postdeploy": "echo This will be run after deploying the app"
+  },
 }
