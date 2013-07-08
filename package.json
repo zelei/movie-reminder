@@ -1,0 +1,15 @@
+{
+  "name": "movie-reminder",
+  "description": "",
+  "author": {
+    "name": "Sándor Zelei",
+    "email": "sandor.zelei@gmail.com"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "ect": "*",
+    "rekuire": "*",
+    "memory-cache": "*"
+  },
+  "main": "./server/server-e.js"
+}
