@@ -12,5 +12,5 @@
     "rekuire": "0.0.10",
     "memory-cache": "0.0.5"
   },
-  "main": "./server/server-e.js"
+  "main": "server"
 }
