@@ -1,6 +1,7 @@
 {
   "name": "movie-reminder",
   "description": "",
+  "version": "0.0.1",
   "author": {
     "name": "Sándor Zelei",
     "email": "sandor.zelei@gmail.com"
