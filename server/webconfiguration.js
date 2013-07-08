@@ -1,6 +1,7 @@
 var env = require('rekuire')("env");
 var express = require('express');
 var ect = require('ect');
+var winston = require('winston');
 
 var templateDirectory = env.root + '/web/views';
 
@@ -11,7 +12,7 @@ app.use(express.static(env.root + '/web/resources'));
 app.engine('.ect', ect({ watch: true, root: templateDirectory }).render);
 
 var loadModule = function(moduleName) {
-    console.log("Load module:", moduleName);
+    winston.info("Load module:", moduleName);
     return require(env.root + moduleName); 
 };
 

@@ -41,7 +41,7 @@
                         </form>
                     
                     
-                        <ul class="unstyled search-list">
+                        <ul class="unstyled search-list" ng-cloak>
                             <li ng-repeat="movie in movies">
                                 <div class="media">
                         			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}"  style="width: 60px; height: 90px;">
@@ -52,7 +52,7 @@
                     
                     </div>  
                 
-                    <div class="span5 upcoming-list" ng-controller="UpcomingWebController">
+                    <div class="span5 upcoming-list" ng-controller="UpcomingWebController" ng-cloak>
                         <ul class="unstyled">
                             <li ng-repeat="movie in movies">
                                 <div class="media">

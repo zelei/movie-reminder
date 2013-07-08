@@ -10,7 +10,8 @@
     "express": "3.3.3",
     "ect": "0.5.2",
     "rekuire": "0.0.10",
-    "memory-cache": "0.0.5"
+    "memory-cache": "0.0.5",
+    "winston": "0.7.2"
   },
   "scripts": {
     "start": "node ./server",

@@ -1,6 +1,9 @@
 var context = require("rekuire")("webconfiguration");
-var jsonUtil = context.require("/server/util/JsonUtil");
 var http = require("http");
+var cache = require('memory-cache');
+var winston = require('winston');
+ 
+var jsonUtil = context.require("/server/util/JsonUtil");
 
 var MovieService = function(apiKey){
 
@@ -12,8 +15,23 @@ var MovieService = function(apiKey){
     }
     
     this.listUpcoming = function(query, success, error) {
-        var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=16&page=1&country=us';
-        callApi(url, success, error, convertMovieToBriefDescription);
+        var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
+                       
+        if(cache.get('listUpcoming')) {
+            winston.info("return cached value");
+            success(cache.get('listUpcoming'));
+        } else {
+            
+            var callbackWrapper = function(cacheableData) {
+                winston.info("put value into cache");
+                cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 12);
+                success(cacheableData);
+            }
+            
+            callApi(url, callbackWrapper, error, convertMovieToBriefDescription);
+        }
+        
+        
     }
     
     function callApi(url, success, error, converter) {
