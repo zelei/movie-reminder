@@ -1,7 +1,6 @@
 var context = require("rekuire")("webconfiguration");
 var movieService = context.require("/server/service/RottenTomatoesMovieService");
 
-
 var Controller = function(req, res){
     
     if(!req.query.q) {
