@@ -54,11 +54,15 @@
                     <div class="span5 upcoming-list">
                         <ul class="unstyled">
                             <% for movie in @movies : %>
-    
                                 <li>
                                     <div class="media">
                         				<img class="img-polaroid pull-left" src="<%-movie.thumbnail%>"  style="width: 60px; height: 90px;">
                         				<h4><%- movie.title %> - <i>(<%- movie.release_dates %>)</i></h4>             
+                                        <p>
+                                            <a href="<%- movie.links.imdb %>" target="_blank">imdb</a>
+                                            - 
+                                            <a href="<%- movie.links.rottentomatoes %>" target="_blank">rottentomatoes</a>
+                                        </p>
                                         <p><%- movie.synopsis %></p>
                                     </div>
                                 </li> 

@@ -75,7 +75,9 @@ var MovieService = function(apiKey){
                             , 'title' : movie.title
                             , 'thumbnail' : movie.posters.thumbnail
                             , 'synopsis' : movie.synopsis
-                            , 'release_dates' : movie.release_dates.theater});
+                            , 'release_dates' : movie.release_dates.theater
+                            , 'links' : {'rottentomatoes' : movie.links.alternate,
+                                         'imdb' : 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb}});
             }
         }
         
