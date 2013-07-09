@@ -3,7 +3,6 @@ var http = require("http");
 var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
- 
 var jsonUtil = context.require("/server/util/JsonUtil");
 
 var MovieService = function(apiKey){
