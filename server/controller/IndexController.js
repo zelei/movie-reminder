@@ -5,6 +5,9 @@ var Controller = function(req, res){
     
     movieService.listUpcoming().then(function(movies) {
         res.render('pages/index.ect', {movies : movies});
+    }, function() {
+        res.writeHead(500);
+        res.end();
     });
     
 }

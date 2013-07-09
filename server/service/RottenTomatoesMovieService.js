@@ -15,7 +15,9 @@ var MovieService = function(apiKey){
         
         var deferred = when.defer();
         
-        callApi(url).then(convertMovieToShortDescription).then(deferred.resolve);
+        callApi(url)
+            .then(convertMovieToShortDescription)
+            .then(deferred.resolve, deferred.reject);
         
         return deferred.promise;
         
@@ -37,7 +39,10 @@ var MovieService = function(apiKey){
                 return cacheableData;
             }
             
-            callApi(url).then(convertMovieToBriefDescription).then(callbackWrapper).then(deferred.resolve);
+            callApi(url)
+                .then(convertMovieToBriefDescription)
+                .then(callbackWrapper)
+                .then(deferred.resolve, deferred.reject);
         }
         
         return deferred.promise;
@@ -56,9 +61,7 @@ var MovieService = function(apiKey){
         
         http.get(options, function(response) {
             jsonUtil.responseToJson(response).then(deferred.resolve);     
-        }).on('error', function(e) {
-            deferred.reject(e);
-        });  
+        }).on('error', deferred.reject);  
         
         return deferred.promise;
     }

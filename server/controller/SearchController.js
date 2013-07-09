@@ -12,6 +12,9 @@ var Controller = function(req, res){
     movieService.search(req.query.q).then(function(shortDesciptinos) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(shortDesciptinos));
+    }, function() {
+        res.writeHead(500);
+        res.end();
     });
 
 }
