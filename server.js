@@ -12,4 +12,3 @@ var port    = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
 console.log('Listening on port ', ipaddr , port);
 
 context.app.listen(port, ipaddr);
-
