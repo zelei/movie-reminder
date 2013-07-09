@@ -11,7 +11,8 @@
     "ect": "0.5.2",
     "rekuire": "0.0.10",
     "memory-cache": "0.0.5",
-    "winston": "0.7.2"
+    "winston": "0.7.2",
+    "when": "2.2.1"
   },
   "scripts": {
     "start": "node ./server",
