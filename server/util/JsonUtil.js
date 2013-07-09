@@ -1,4 +1,8 @@
-var responseToJson = function(response, callback) {
+var when = require("when");
+
+var responseToJson = function(response) {
+        
+        var deferred = when.defer()
         
         var body = [];
         response.setEncoding('utf8');
@@ -8,8 +12,10 @@ var responseToJson = function(response, callback) {
         });
         
         response.on('end', function () {
-            callback(JSON.parse(body.join('')));
+           deferred.resolve(JSON.parse(body.join('')));
         });
+        
+        return deferred.promise;
     
 }
 

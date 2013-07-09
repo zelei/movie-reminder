@@ -1,5 +1,6 @@
 var context = require("rekuire")("webconfiguration");
 var http = require("http");
+var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
  
@@ -9,32 +10,41 @@ var MovieService = function(apiKey){
 
     this.apiKey = apiKey;
 
-    this.search = function(query, success, error) {
+    this.search = function(query) {
         var url = '/api/public/v1.0/movies.json?apikey=' + this.apiKey + '&q=' + encodeURIComponent(query);
-        callApi(url, success, error, convertMovieToShortDescription);   
+        
+        var deferred = when.defer();
+        
+        callApi(url).then(convertMovieToShortDescription).then(deferred.resolve);
+        
+        return deferred.promise;
+        
     }
     
-    this.listUpcoming = function(success, error) {
+    this.listUpcoming = function() {
         var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
-                       
+        
+        var deferred = when.defer();
+        
         if(cache.get('listUpcoming')) {
             winston.info("return cached value");
-            success(cache.get('listUpcoming'));
+            deferred.resolve(cache.get('listUpcoming'));
         } else {
             
             var callbackWrapper = function(cacheableData) {
                 winston.info("put value into cache");
                 cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 12);
-                success(cacheableData);
+                return cacheableData;
             }
             
-            callApi(url, callbackWrapper, error, convertMovieToBriefDescription);
+            callApi(url).then(convertMovieToBriefDescription).then(callbackWrapper).then(deferred.resolve);
         }
         
+        return deferred.promise;
         
     }
     
-    function callApi(url, success, error, converter) {
+    function callApi(url) {
         
         var options = {
             host: 'api.rottentomatoes.com',
@@ -42,15 +52,15 @@ var MovieService = function(apiKey){
             path: url  
         };
         
+        var deferred = when.defer();
+        
         http.get(options, function(response) {
-        
-            jsonUtil.responseToJson(response, function(moviesData) {
-                success(converter(moviesData))           
-            });
-        
+            jsonUtil.responseToJson(response).then(deferred.resolve);     
         }).on('error', function(e) {
-          error(e);
+            deferred.reject(e);
         });  
+        
+        return deferred.promise;
     }
     
     function convertMovieToBriefDescription(moviesData) {                  

@@ -9,13 +9,10 @@ var Controller = function(req, res){
         return;
     }
     
-    movieService.search(req.query.q, function(shortDesciptinos) {
+    movieService.search(req.query.q).then(function(shortDesciptinos) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(shortDesciptinos));
-    }, function(error) {
-        res.writeHead(500);
-        res.end(JSON.stringify(error));
-    })
+    });
 
 }
 
