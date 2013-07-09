@@ -14,7 +14,7 @@ var MovieService = function(apiKey){
         callApi(url, success, error, convertMovieToShortDescription);   
     }
     
-    this.listUpcoming = function(query, success, error) {
+    this.listUpcoming = function(success, error) {
         var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
                        
         if(cache.get('listUpcoming')) {

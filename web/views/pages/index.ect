@@ -3,7 +3,6 @@
 <% block 'javascript' : %>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
    <script src="client/SearchWebController.js"></script>
-   <script src="client/UpcomingWebController.js"></script>
 <% end %>
 
 <% block 'body' : %>
@@ -52,15 +51,18 @@
                     
                     </div>  
                 
-                    <div class="span5 upcoming-list" ng-controller="UpcomingWebController" ng-cloak>
+                    <div class="span5 upcoming-list">
                         <ul class="unstyled">
-                            <li ng-repeat="movie in movies">
-                                <div class="media">
-                    				<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}"  style="width: 60px; height: 90px;">
-                    				<h4>{{movie.title}} - <i>({{movie.release_dates}})</i></h4>             
-                                    <p>{{movie.synopsis}}</p>
-                                </div>
-                            </li>    
+                            <% for movie in @movies : %>
+    
+                                <li>
+                                    <div class="media">
+                        				<img class="img-polaroid pull-left" src="<%-movie.thumbnail%>"  style="width: 60px; height: 90px;">
+                        				<h4><%- movie.title %> - <i>(<%- movie.release_dates %>)</i></h4>             
+                                        <p><%- movie.synopsis %></p>
+                                    </div>
+                                </li> 
+                            <% end %>
                         </ul>
                     </div>
                     
