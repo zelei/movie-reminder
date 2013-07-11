@@ -3,17 +3,33 @@
 <% block 'javascript' : %>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
    <script src="client/SearchWebController.js"></script>
+   <script>
+        $('*[data-toggle="popover"]').popover();
+   </script>
 <% end %>
 
 <% block 'body' : %>
     
         <div class="masthead">
-            <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
+                    
+            <div class="pull-right">
+                <% if @user : %>
+                    <a href="#" class="btn" 
+                        data-toggle="popover" 
+                        data-placement="bottom" 
+                        data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                        Hello <%- @user.profile.name.givenName %>!        
+                    </a>
+                    
+                    <div id="popover-content" class="hide">
+                        ssss
+                    </div>
+
+                <% end : %>           
+            </div>
+            
             <h2 class="muted">Movie Reminder</h2>
+                      
         </div>
     
         <hr>
@@ -21,11 +37,14 @@
         <div class="jumbotron">
             <h1>Super awesome shit!</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <a class="btn btn-large btn-success" href="#">Sign up today</a>
+            
+            <% if !@user : %>
+                <a class="btn btn-large btn-success" href="/auth/google">Sign In with Google</a>
+            <% end %>
+            
         </div>
     
         <hr>
-
          
         <div class="row">
             <div class="span12">
@@ -33,7 +52,7 @@
                     <div class="span6" ng-controller="SearchWebController">
                     
                         <form class="form-search" ng-submit="search()">
-                            <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-medium search-query span5">
+                            <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
                             <button type="submit" class="btn">Search</button>
                         </form>
                     

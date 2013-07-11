@@ -4,8 +4,6 @@
 
 function SearchWebController($scope, $http) {
 
-    var canceler;
-
     $scope.query = '';
 
     $scope.search = function() {

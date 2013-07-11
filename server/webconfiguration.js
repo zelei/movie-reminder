@@ -1,18 +1,54 @@
 var env = require('rekuire')("env");
 var express = require('express');
 var ect = require('ect');
-var winston = require('winston');
+var logger = require('winston');
+var passport = require('passport')
+var GoogleStrategy = require('passport-google').Strategy;
+
+passport.use(new GoogleStrategy({
+    returnURL: 'http://movie-reminder.zelei.c9.io/auth/google/return',
+    realm: 'http://movie-reminder.zelei.c9.io'
+  },
+  
+  function(identifier, profile, done) {
+    done(null, {id : 42, profile: profile});
+  }
+  
+));
 
 var templateDirectory = env.root + '/web/views';
 
 var app = express();
-app.set('views', templateDirectory);
-app.use(express.static(env.root + '/web/resources'));
 
-app.engine('.ect', ect({ watch: true, root: templateDirectory }).render);
+app.configure(function() {
+  
+  // ECT
+  app.set('views', templateDirectory);
+  app.engine('.ect', ect({ watch: true, root: templateDirectory }).render);
+
+  // Express
+  app.use(express.static(env.root + '/web/resources'));
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.session({ secret: 'keyboard cat' }));
+  
+  // Passport
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  app.use(app.router);  
+});
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
 var loadModule = function(moduleName) {
-    winston.info("Load module:", moduleName);
+    logger.info("Load module:", moduleName);
     return require(env.root + moduleName); 
 };
 

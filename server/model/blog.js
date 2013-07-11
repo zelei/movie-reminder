@@ -3,7 +3,7 @@ var database = require("../service/database");
 
 
 //create schema for blog post
-var blogSchema = new database.mongoose.Schema({
+var userSchema = new database.mongoose.Schema({
   title:  String,
   author: String,
   body:   String,
@@ -17,4 +17,4 @@ var blogSchema = new database.mongoose.Schema({
 });
 
 //compile schema to model
-module.exports = database.connection.model('blog', blogSchema)
+module.exports = database.connection.model('blog', userSchema)

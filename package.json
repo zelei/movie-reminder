@@ -12,7 +12,9 @@
     "rekuire": "0.0.10",
     "memory-cache": "0.0.5",
     "winston": "0.7.2",
-    "when": "2.2.1"
+    "when": "2.2.1",
+    "passport": "0.1.17",
+    "passport-google": "0.3.0"
   },
   "scripts": {
     "start": "node ./server",
