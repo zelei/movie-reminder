@@ -7,12 +7,24 @@ body {
     padding-bottom: 40px;
 }
 
-/* Custom container */
-.container-narrow {
-    margin: 0 auto;
-    max-width: 870px;
-}
-
 .upcoming-list li, .search-list li {
     margin-bottom: 10px;
+}
+
+.upcoming-list .movie {
+    border-left: 3px solid white;
+    padding-left: 4px;
+    cursor: pointer;
+}
+
+.upcoming-list .movie.selected {
+    border-left: 3px solid black;
+}
+
+.upcoming-list .movie.selected h4 {
+    font-weight: bold;
+}
+
+.upcoming-list .movie:HOVER {
+    border-color: #999;
 }
