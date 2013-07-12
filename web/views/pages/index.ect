@@ -3,9 +3,6 @@
 <% block 'javascript' : %>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
    <script src="client/SearchWebController.js"></script>
-   <script>
-        $('*[data-toggle="popover"]').popover();
-   </script>
 <% end %>
 
 <% block 'body' : %>
@@ -14,17 +11,16 @@
                     
             <div class="pull-right">
                 <% if @user : %>
-                    <a href="#" class="btn" 
-                        data-toggle="popover" 
-                        data-placement="bottom" 
-                        data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                        Hello <%- @user.profile.name.givenName %>!        
-                    </a>
-                    
-                    <div id="popover-content" class="hide">
-                        ssss
-                    </div>
 
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            Hello <%- @user.profile.name.givenName %>! &nbsp;<span class="caret"></span>    
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="/logout">Sign out</a></li>
+                        </ul>
+                    </div>
+              
                 <% end : %>           
             </div>
             

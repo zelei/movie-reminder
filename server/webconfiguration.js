@@ -11,6 +11,7 @@ passport.use(new GoogleStrategy({
   },
   
   function(identifier, profile, done) {
+      logger.info(profile);
     done(null, {id : 42, profile: profile});
   }
   
@@ -28,6 +29,7 @@ app.configure(function() {
 
   // Express
   app.use(express.static(env.root + '/web/resources'));
+  app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.session({ secret: 'keyboard cat' }));
