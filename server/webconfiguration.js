@@ -6,8 +6,8 @@ var passport = require('passport')
 var GoogleStrategy = require('passport-google').Strategy;
 
 passport.use(new GoogleStrategy({
-    returnURL: 'http://movie-reminder.zelei.c9.io/auth/google/return',
-    realm: 'http://movie-reminder.zelei.c9.io'
+    returnURL: env.host + '/auth/google/return',
+    realm: env.host
   },
   
   function(identifier, profile, done) {
