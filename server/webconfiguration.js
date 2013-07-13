@@ -5,15 +5,22 @@ var logger = require('winston');
 var passport = require('passport')
 var GoogleStrategy = require('passport-google').Strategy;
 
+var User = env.require("/server/model/User");
+
 passport.use(new GoogleStrategy({
     returnURL: env.host + '/auth/google/return',
     realm: env.host
-  },
-  
-  function(identifier, profile, done) {
-      logger.info(profile);
-    done(null, {id : 42, profile: profile});
-  }
+    },  function(identifier, profile, done) {
+           
+            var query = {"id": identifier};
+            var options = {upsert: true};
+            var user = {"id": identifier, "name": profile.name.givenName};
+                  
+            User.findOneAndUpdate(query, user, options, function(err, person) {
+                done(err, person);
+            });
+            
+        }
   
 ));
 
@@ -29,7 +36,7 @@ app.configure(function() {
 
   // Express
   app.use(express.static(env.root + '/web/resources'));
-  app.use(express.logger());
+  //app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.session({ secret: 'keyboard cat' }));
@@ -49,9 +56,5 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
-var loadModule = function(moduleName) {
-    logger.info("Load module:", moduleName);
-    return require(env.root + moduleName); 
-};
 
-module.exports = {'app' : app, 'ect' : ect, 'require' : loadModule };
+module.exports = {'app' : app, 'ect' : ect};

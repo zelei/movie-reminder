@@ -1,9 +1,14 @@
-var context = require("rekuire")("webconfiguration");
+var env = require("rekuire")("env");
 var http = require("http");
 var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
-var jsonUtil = context.require("/server/util/JsonUtil");
+var jsonUtil = env.require("/server/util/JsonUtil");
+
+var UserRepository = env.require("/server/service/repository/UserRepository");
+
+var Movie = env.require("/server/model/Movie");
+var Link = env.require("/server/model/Link");
 
 var MovieService = function(apiKey){
 
@@ -20,7 +25,18 @@ var MovieService = function(apiKey){
         
         return deferred.promise;
         
-    }
+    };
+        
+    this.listUpcomingForUser = function(userId) {
+        
+        var deferred = when.defer();
+        
+        when.join(this.listUpcoming(), UserRepository.findById(userId))
+            .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
+            .then(deferred.resolve, deferred.reject);
+            
+        return deferred.promise;        
+    };
     
     this.listUpcoming = function() {
         var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
@@ -32,21 +48,21 @@ var MovieService = function(apiKey){
             deferred.resolve(cache.get('listUpcoming'));
         } else {
             
-            var callbackWrapper = function(cacheableData) {
+            var putInotCache = function(cacheableData) {
                 winston.info("put value into cache");
                 cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 12);
                 return cacheableData;
-            }
+            };
             
             callApi(url)
                 .then(convertMovieToBriefDescription)
-                .then(callbackWrapper)
+                .then(putInotCache)
                 .then(deferred.resolve, deferred.reject);
         }
         
         return deferred.promise;
         
-    }
+    };
     
     function callApi(url) {
         
@@ -65,40 +81,44 @@ var MovieService = function(apiKey){
         return deferred.promise;
     }
     
-    function convertMovieToBriefDescription(moviesData) {                  
-        var movies = [];
-
-        if(moviesData.total > 0) {           
-            for (var i = 0; i < moviesData.movies.length; i++) {
-                var movie = moviesData.movies[i];
-                movies.push({ 'id' : movie.id
-                            , 'title' : movie.title
-                            , 'thumbnail' : movie.posters.thumbnail
-                            , 'synopsis' : movie.synopsis
-                            , 'release_dates' : movie.release_dates.theater
-                            , 'links' : {'rottentomatoes' : movie.links.alternate,
-                                         'imdb' : 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb}});
+    function markSelectedMovies(movies, selectedMovies) {      
+        return movies.map(function(movie) {
+            var clone = movie.clone();
+            
+            if(selectedMovies.indexOf(clone.id) != -1) {
+                clone.selected = true;
             }
+            
+            return clone;
+        });
+    }
+    
+    function convertMovieToBriefDescription(moviesData) {                  
+
+        if(moviesData.total > 0) {
+            return moviesData.movies.map(function(movie) {
+                    return new Movie( 
+                              movie.id
+                            , movie.title
+                            , movie.posters.thumbnail
+                            , movie.synopsis
+                            , movie.release_dates.theater
+                            , [ new Link("rottentomatoes", movie.links.alternate)
+                              , new Link("imdb", 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb)])});
         }
-        
-        return movies;
+    
     }
     
     function convertMovieToShortDescription(moviesData) {                  
-        var movies = [];
-
-        if(moviesData.total > 0) {           
-            for (var i = 0; i < moviesData.movies.length; i++) {
-                var movie = moviesData.movies[i];
-                movies.push({'id' : movie.id,
-                             'title' : movie.title, 
-                             'thumbnail' : movie.posters.thumbnail});
-            }
+        if(moviesData.total > 0) {
+            return moviesData.movies.map(function(movie) {
+                    return new Movie( 
+                              movie.id
+                            , movie.title
+                            , movie.posters.thumbnail)});
         }
-        
-        return movies;
     }
     
-}
+};
 
 module.exports = new MovieService("g2s78atyq2725dc65zau9cyv");

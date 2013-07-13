@@ -1,15 +1,5 @@
-var context = require("rekuire")("webconfiguration");
-var movieService = context.require("/server/service/RottenTomatoesMovieService");
-
 var Controller = function(req, res){
-                
-    movieService.listUpcoming().then(function(movies) {
-        res.render('pages/index.ect', {user: req.user, movies : movies});
-    }, function() {
-        res.writeHead(500);
-        res.end();
-    });
-    
+    res.render('pages/index.ect', {user: req.user});   
 }
 
 module.exports = Controller;

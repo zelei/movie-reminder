@@ -1,10 +1,19 @@
 var passport = require('passport');
 var context = require("rekuire")("webconfiguration");
-var env = context.require("/env");
+var env = require("rekuire")("env");
 
-context.app.get('/', context.require("/server/controller/IndexController"));
+var movieController = env.require("/server/controller/MovieController").getInstance();
+var searchController = env.require("/server/controller/SearchController").getInstance();
 
-context.app.get('/search', context.require("/server/controller/SearchController"));
+context.app.get('/', env.require("/server/controller/IndexController"));
+
+context.app.get('/movie/search', searchController.search);
+
+context.app.get('/movie/upcoming', movieController.upcoming);
+
+context.app.post('/movie/mark', movieController.mark);
+
+context.app.post('/movie/unmark', movieController.unmark);
 
 // OpenID
 context.app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.me' }));

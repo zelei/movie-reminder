@@ -13,8 +13,8 @@ function SearchWebController($scope, $http) {
             return;
         }
         
-       console.log('search?q=' + $scope.query);
-        $http.get('search?q=' + $scope.query).success(function(data) {
+       console.log('/movie/search?q=' + $scope.query);
+        $http.get('/movie/search?q=' + $scope.query).success(function(data) {
             $scope.movies = data;
         });    
         

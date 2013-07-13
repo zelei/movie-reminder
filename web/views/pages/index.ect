@@ -3,6 +3,7 @@
 <% block 'javascript' : %>
    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
    <script src="client/SearchWebController.js"></script>
+   <script src="client/UpcomingWebController.js"></script>
 <% end %>
 
 <% block 'body' : %>
@@ -14,10 +15,10 @@
 
                     <div class="btn-group">
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
-                            Hello <%- @user.profile.name.givenName %>! &nbsp;<span class="caret"></span>    
+                            Hello <%- @user.name %>! &nbsp;<span class="caret"></span>    
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="/logout">Sign out</a></li>
+                            <li><a href="/logout"><i class="icon-off"></i>&nbsp;Sign out</a></li>
                         </ul>
                     </div>
               
@@ -36,8 +37,7 @@
             
             <% if !@user : %>
                 <a class="btn btn-large btn-success" href="/auth/google">Sign In with Google</a>
-            <% end %>
-            
+            <% end %>        
         </div>
     
         <hr>
@@ -45,6 +45,23 @@
         <div class="row">
             <div class="span12">
                 <div class="row">
+
+                    <div class="span6 upcoming-list" ng-controller="UpcomingWebController">
+                        <h3>COMING SOON</h3>
+                        <ul class="unstyled" ng-cloak>
+                            <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
+                                <div class="media" ng-click="select(movie)">     
+                        			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+                    				<h4>{{movie.title}} - <i>({{movie.releaseDate}})</i></h4>             
+                                    <p>
+                                        <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                                    </p>
+                                    <p>{{movie.synopsis}}</p>
+                                </div>
+                            </li> 
+                        </ul>
+                    </div>
+                    
                     <div class="span6" ng-controller="SearchWebController">
                     
                         <form class="form-search" ng-submit="search()">
@@ -63,26 +80,6 @@
                         </ul>
                     
                     </div>  
-                
-                    <div class="span6 upcoming-list">
-                        <h3>COMING SOON</h3>
-                        <ul class="unstyled">
-                            <% for movie in @movies : %>
-                                <li class="movie">
-                                    <div class="media">
-                        				<img class="img-polaroid pull-left" src="<%-movie.thumbnail%>"  style="width: 60px; height: 90px;">
-                        				<h4><%- movie.title %> - <i>(<%- movie.release_dates %>)</i></h4>             
-                                        <p>
-                                            <a href="<%- movie.links.imdb %>" target="_blank">imdb</a>
-                                            - 
-                                            <a href="<%- movie.links.rottentomatoes %>" target="_blank">rottentomatoes</a>
-                                        </p>
-                                        <p><%- movie.synopsis %></p>
-                                    </div>
-                                </li> 
-                            <% end %>
-                        </ul>
-                    </div>
                     
                 </div>
             </div>
