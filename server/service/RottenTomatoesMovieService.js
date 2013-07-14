@@ -20,13 +20,28 @@ var MovieService = function(apiKey){
         var deferred = when.defer();
         
         callApi(url)
-            .then(convertMovieToShortDescription)
+            .then(convertMovieToBriefDescription)
             .then(deferred.resolve, deferred.reject);
         
         return deferred.promise;
         
     };
+    
+    this.listMarkedMoviesForUser = function(userId) {
         
+        var deferred = when.defer();
+        
+        UserRepository.findById(userId).then(function(user) {
+            return when.all(user.selectedMovies.map(function(movieId) {
+                return callApi('/api/public/v1.0/movies/'+movieId+'.json?apikey=' + apiKey);
+            }));
+        }).then(function(movies){
+            return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies})
+        }).then(deferred.resolve, deferred.reject);
+            
+        return deferred.promise;        
+    };
+    
     this.listUpcomingForUser = function(userId) {
         
         var deferred = when.defer();
@@ -50,7 +65,7 @@ var MovieService = function(apiKey){
             
             var putInotCache = function(cacheableData) {
                 winston.info("put value into cache");
-                cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 12);
+                cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
                 return cacheableData;
             };
             
@@ -95,28 +110,28 @@ var MovieService = function(apiKey){
     
     function convertMovieToBriefDescription(moviesData) {                  
 
-        if(moviesData.total > 0) {
-            return moviesData.movies.map(function(movie) {
-                    return new Movie( 
-                              movie.id
-                            , movie.title
-                            , movie.posters.thumbnail
-                            , movie.synopsis
-                            , movie.release_dates.theater
-                            , [ new Link("rottentomatoes", movie.links.alternate)
-                              , new Link("imdb", 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb)])});
+        if(moviesData.total === 0) {
+            return [];
         }
-    
-    }
-    
-    function convertMovieToShortDescription(moviesData) {                  
-        if(moviesData.total > 0) {
-            return moviesData.movies.map(function(movie) {
-                    return new Movie( 
-                              movie.id
-                            , movie.title
-                            , movie.posters.thumbnail)});
-        }
+        
+        return moviesData.movies.map(function(movie) {
+                var links = [];            
+                if(movie.links && movie.links.alternate) {
+                    links.push(new Link("rottentomatoes", movie.links.alternate));
+                }
+            
+                if(movie.alternate_ids && movie.alternate_ids.imdb) {
+                    links.push(new Link("imdb", 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb));
+                }
+            
+                return new Movie( 
+                          movie.id
+                        , movie.title
+                        , movie.posters.thumbnail
+                        , movie.synopsis
+                        , movie.release_dates.theater
+                        , links)});
+
     }
     
 };

@@ -12,7 +12,11 @@ var responseToJson = function(response) {
         });
         
         response.on('end', function () {
-           deferred.resolve(JSON.parse(body.join('')));
+            try {
+                deferred.resolve(JSON.parse(body.join('')));
+            } catch(e) {
+                deferred.reject(e);
+            }    
         });
         
         return deferred.promise;

@@ -11,25 +11,25 @@ body {
     margin-top: 5px;    
 }
 
-.upcoming-list li, .search-list li {
+.movie-list li, .search-list li {
     margin-bottom: 10px;
 }
 
-.upcoming-list .movie {
+.movie-list .movie {
     border-left: 3px solid white;
     padding-left: 4px;
     cursor: pointer;
 }
 
-.upcoming-list .movie.selected {
+.movie-list .movie.selected {
     border-left: 3px solid black;
 }
 
-.upcoming-list .movie.selected h4 {
+.movie-list .movie.selected h4 {
     font-weight: bold;
 }
 
-.upcoming-list .movie:HOVER {
+.movie-list .movie:HOVER {
     border-color: #999;
 }
 

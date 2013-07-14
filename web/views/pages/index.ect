@@ -1,9 +1,11 @@
 <% extend 'templates/default.ect' %>
 
 <% block 'javascript' : %>
-   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-   <script src="client/SearchWebController.js"></script>
-   <script src="client/UpcomingWebController.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="client/service/MovieService.js"></script>
+    <script src="client/controller/SearchWebController.js"></script>
+    <script src="client/controller/UpcomingWebController.js"></script>
+    <script src="client/controller/WatchListWebController.js"></script>
 <% end %>
 
 <% block 'body' : %>
@@ -46,13 +48,58 @@
             <div class="span12">
                 <div class="row">
 
-                    <div class="span6 upcoming-list" ng-controller="UpcomingWebController">
-                        <h3>COMING SOON</h3>
-                        <ul class="unstyled" ng-cloak>
-                            <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
+                    <div class="span6">
+                        <div class="row">
+
+                            <div class="span6" ng-controller="SearchWebController">
+                            
+                                <form class="form-search" ng-submit="search()">
+                                    <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
+                                    <button type="submit" class="btn">Search</button>
+                                </form>
+                                
+                                <h3 ng-show="movies.length">SEARCH LIST</h3>                              
+                                <ul class="unstyled movie-list" ng-cloak>
+                                    <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
+                                        <div class="media" ng-click="select(movie)">     
+                                    		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+                            				<h4>{{movie.title}}<i ng-show="movie.releaseDate"> - ({{movie.releaseDate}})</i></h4>             
+                                            <p>
+                                                <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                                            </p>
+                                            <p>{{movie.synopsis}}</p>
+                                        </div>
+                                    </li>    
+                                </ul>
+                            
+                            </div> 
+                            
+                            <div class="span6" ng-controller="UpcomingWebController">            
+                                <h3 ng-show="upcomingMovies.length">COMING SOON</h3>
+                                <ul class="unstyled movie-list" ng-cloak>
+                                    <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
+                                        <div class="media" ng-click="select(movie)">     
+                                			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+                                			<h4>{{movie.title}}<i ng-show="movie.releaseDate"> - ({{movie.releaseDate}})</i></h4>           
+                                            <p>
+                                                <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                                            </p>
+                                            <p>{{movie.synopsis}}</p>
+                                        </div>
+                                    </li> 
+                                </ul>
+                            </div>
+                            
+                        </div>  
+                    </div>
+                    
+                    <div class="span6" ng-controller="WatchListWebController">            
+                        <h3 ng-show="movies.length">WATCH LIST</h3>
+                        <ul class="unstyled movie-list" ng-cloak>
+                            <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
                                 <div class="media" ng-click="select(movie)">     
-                        			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
-                    				<h4>{{movie.title}} - <i>({{movie.releaseDate}})</i></h4>             
+                            		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+                        			<h4>{{movie.title}}<i ng-show="movie.releaseDate"> - ({{movie.releaseDate}})</i></h4>           
                                     <p>
                                         <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
                                     </p>
@@ -61,25 +108,6 @@
                             </li> 
                         </ul>
                     </div>
-                    
-                    <div class="span6" ng-controller="SearchWebController">
-                    
-                        <form class="form-search" ng-submit="search()">
-                            <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
-                            <button type="submit" class="btn">Search</button>
-                        </form>
-                    
-                    
-                        <ul class="unstyled search-list" ng-cloak>
-                            <li ng-repeat="movie in movies">
-                                <div class="media">
-                        			<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}"  style="width: 60px; height: 90px;">
-                    				<h4>{{movie.title}}</h4>
-                                </div>
-                            </li>    
-                        </ul>
-                    
-                    </div>  
                     
                 </div>
             </div>
