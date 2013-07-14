@@ -50,29 +50,31 @@
 
                     <div class="span6">
                         <div class="row">
-
-                            <div class="span6" ng-controller="SearchWebController">
                             
-                                <form class="form-search" ng-submit="search()">
-                                    <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
-                                    <button type="submit" class="btn">Search</button>
-                                </form>
+                            <% if @user : %>
+                                <div class="span6" ng-controller="SearchWebController">
+                                                     
+                                    <form class="form-search" ng-submit="search()">
+                                        <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
+                                        <button type="submit" class="btn">Search</button>
+                                    </form>
+                                                  
+                                    <h3 ng-show="movies.length">SEARCH LIST</h3>                              
+                                    <ul class="unstyled movie-list" ng-cloak>
+                                        <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
+                                            <div class="media" ng-click="select(movie)">     
+                                        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+                                				<h4>{{movie.title}}<i ng-show="movie.releaseDate"> - ({{movie.releaseDate}})</i></h4>             
+                                                <p>
+                                                    <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                                                </p>
+                                                <p>{{movie.synopsis}}</p>
+                                            </div>
+                                        </li>    
+                                    </ul>
                                 
-                                <h3 ng-show="movies.length">SEARCH LIST</h3>                              
-                                <ul class="unstyled movie-list" ng-cloak>
-                                    <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
-                                        <div class="media" ng-click="select(movie)">     
-                                    		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
-                            				<h4>{{movie.title}}<i ng-show="movie.releaseDate"> - ({{movie.releaseDate}})</i></h4>             
-                                            <p>
-                                                <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
-                                            </p>
-                                            <p>{{movie.synopsis}}</p>
-                                        </div>
-                                    </li>    
-                                </ul>
-                            
-                            </div> 
+                                </div> 
+                            <% end %>
                             
                             <div class="span6" ng-controller="UpcomingWebController">            
                                 <h3 ng-show="upcomingMovies.length">COMING SOON</h3>
@@ -93,8 +95,9 @@
                         </div>  
                     </div>
                     
-                    <div class="span6" ng-controller="WatchListWebController">            
-                        <h3 ng-show="movies.length">WATCH LIST</h3>
+                    <div class="span6" ng-controller="WatchListWebController"> 
+                        
+                        <h3>WATCH LIST</h3>
                         <ul class="unstyled movie-list" ng-cloak>
                             <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
                                 <div class="media" ng-click="select(movie)">     
@@ -107,6 +110,17 @@
                                 </div>
                             </li> 
                         </ul>
+                        
+                        <% if @user : %>
+                            <div ng-show="!movies.length" class="alert alert-info" ng-cloak>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
+                            </div>                        
+                        <% else : %>  
+                            <div class="alert alert-info">
+                                !!Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
+                            </div>
+                        <% end %>           
+                        
                     </div>
                     
                 </div>

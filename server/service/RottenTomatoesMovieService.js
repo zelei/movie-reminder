@@ -14,15 +14,15 @@ var MovieService = function(apiKey){
 
     this.apiKey = apiKey;
 
-    this.search = function(query) {
+    this.search = function(query, userId) {
         var url = '/api/public/v1.0/movies.json?apikey=' + this.apiKey + '&q=' + encodeURIComponent(query);
         
         var deferred = when.defer();
         
-        callApi(url)
-            .then(convertMovieToBriefDescription)
+        when.join(callApi(url).then(convertMovieToBriefDescription), UserRepository.findById(userId))
+            .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
             .then(deferred.resolve, deferred.reject);
-        
+            
         return deferred.promise;
         
     };
