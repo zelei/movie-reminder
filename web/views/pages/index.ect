@@ -3,7 +3,10 @@
 <% block 'javascript' : %>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+    
+    <script src="client/service/Application.js"></script>
     <script src="client/service/MovieService.js"></script>
+    
     <script src="client/controller/SearchWebController.js"></script>
     <script src="client/controller/UpcomingWebController.js"></script>
     <script src="client/controller/WatchListWebController.js"></script>
@@ -56,11 +59,17 @@
                                 <div class="span6" ng-controller="SearchWebController">
                                                      
                                     <form class="form-search" ng-submit="search()">
-                                        <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">
-                                        <button type="submit" class="btn">Search</button>
+                                        <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">    
+                                        <button type="submit" class="btn" ng-disabled="searching">Search</button>
                                     </form>
                                                   
-                                    <h3 ng-show="movies.length">SEARCH LIST</h3>                              
+                                    <h3 ng-cloak ng-show="movies.length != 0 || query.length != 0">
+                                        <span class="pointer" ng-click="loadData()">SEARCH LIST</span>
+                                        <span ng-show="searching" ng-cloak>...</span>                                        
+                                    </h3> 
+                                    
+                                    <span ng-cloak ng-show="movies.length == 0 && query.length != 0 && !searching">No result.</span>
+                                    
                                     <ul class="unstyled movie-list" ng-cloak>
                                         <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
                                             <div class="media" ng-click="select(movie)">     
@@ -77,8 +86,11 @@
                                 </div> 
                             <% end %>
                             
-                            <div class="span6" ng-controller="UpcomingWebController">            
-                                <h3 ng-show="upcomingMovies.length">COMING SOON</h3>
+                            <div class="span6" ng-controller="UpcomingWebController"> 
+                                <h3>
+                                    <span class="pointer" ng-click="loadData()">COMING SOON</span>
+                                    <span ng-show="loading" ng-cloak>...</span>
+                                </h3>
                                 <ul class="unstyled movie-list" ng-cloak>
                                     <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
                                         <div class="media" ng-click="select(movie)">     
@@ -87,7 +99,7 @@
                                             <p>
                                                 <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
                                             </p>
-                                            <zippy synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></zippy>
+                                            <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
                                         </div>
                                     </li> 
                                 </ul>
@@ -97,8 +109,15 @@
                     </div>
                     
                     <div class="span6" ng-controller="WatchListWebController"> 
+                        <h3>
+                            <% if @user : %>
+                                <span class="pointer" ng-click="loadData()">WATCH LIST</span>
+                                <span ng-show="loading" ng-cloak>...</span>
+                            <% else : %>  
+                                <span data-toggle="tooltip">WATCH LIST</span>    
+                            <% end %>                              
+                        </h3>
                         
-                        <h3>WATCH LIST</h3>
                         <ul class="unstyled movie-list" ng-cloak>
                             <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
                                 <div class="media" ng-click="select(movie)">     
@@ -107,17 +126,17 @@
                                     <p>
                                         <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
                                     </p>
-                                    <p>{{movie.synopsis}}</p>
+                                    <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
                                 </div>
                             </li> 
                         </ul>
                         
                         <% if @user : %>
-                            <div ng-show="!movies.length" class="alert alert-info" ng-cloak>
+                            <div ng-show="movies.length == 0 && !loading" class="alert alert-info" ng-cloak>
                                 Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
                             </div>                        
                         <% else : %>  
-                            <div class="alert alert-info">
+                            <div class="alert alert-info" ng-cloak>
                                 !!Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
                             </div>
                         <% end %>           

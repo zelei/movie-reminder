@@ -6,6 +6,8 @@ function SearchWebController($rootScope, $scope, movieService) {
 
     $scope.movies = [];
 
+    $scope.searching = false;
+    
     $scope.query = '';
 
     ['watchlist-selection-change'].forEach(function(name) {
@@ -33,11 +35,19 @@ function SearchWebController($rootScope, $scope, movieService) {
             return;
         }
         
-        $scope.movies = [];        
+        startSearching();     
         movieService.search($scope.query).then(function(data) {
             $scope.movies = data;
-        });
+        }).then(stopSearching);
 
     };
+
+    function startSearching() {
+      $scope.searching = true;  
+    }
+    
+    function stopSearching() {
+      $scope.searching = false;  
+    }
 
 }

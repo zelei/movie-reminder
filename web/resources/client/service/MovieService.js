@@ -5,7 +5,7 @@ app.factory('_', function() {
   return window._; 
 });
 
-app.directive('zippy', function($compile, _){
+app.directive('read', function($compile, _){
     
     var expandableTemplate = 
                 '<div>' +

@@ -64,7 +64,7 @@ var MovieService = function(apiKey){
             deferred.resolve(cache.get('listUpcoming'));
         } else {
             
-            var putInotCache = function(cacheableData) {
+            var putIntoCache = function(cacheableData) {
                 winston.info("put value into cache");
                 cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
                 return cacheableData;
@@ -73,7 +73,7 @@ var MovieService = function(apiKey){
             callApi(url)
                 .then(convertMovieToBriefDescription)
                 .then(sortByReleaseDate)
-                .then(putInotCache)
+                .then(putIntoCache)
                 .then(deferred.resolve, deferred.reject);
         }
         
@@ -114,9 +114,16 @@ var MovieService = function(apiKey){
         function compare(a,b) {
             
             if(a.releaseDate && b.releaseDate) {
+                
                 if (a.releaseDate < b.releaseDate) {return -1;}
                 if (a.releaseDate > b.releaseDate) {return 1;}
-                return 0;
+                
+                if(a.title && b.title) {
+                    if (a.title < b.title) {return -1;}
+                    if (a.title > b.title) {return 1;}
+                    return 0;
+                } 
+            
             }
             
             if(a.title && b.title) {
