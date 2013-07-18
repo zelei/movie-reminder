@@ -21,6 +21,7 @@ var MovieService = function(apiKey){
         
         when.join(callApi(url).then(convertMovieToBriefDescription), UserRepository.findById(userId))
             .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
+            .then(sortByReleaseDate)
             .then(deferred.resolve, deferred.reject);
             
         return deferred.promise;
@@ -37,7 +38,7 @@ var MovieService = function(apiKey){
             }));
         }).then(function(movies){
             return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies})
-        }).then(deferred.resolve, deferred.reject);
+        }).then(sortByReleaseDate).then(deferred.resolve, deferred.reject);
             
         return deferred.promise;        
     };
@@ -48,6 +49,7 @@ var MovieService = function(apiKey){
         
         when.join(this.listUpcoming(), UserRepository.findById(userId))
             .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
+            .then(sortByReleaseDate)
             .then(deferred.resolve, deferred.reject);
             
         return deferred.promise;        
@@ -59,7 +61,6 @@ var MovieService = function(apiKey){
         var deferred = when.defer();
         
         if(cache.get('listUpcoming')) {
-            winston.info("return cached value");
             deferred.resolve(cache.get('listUpcoming'));
         } else {
             
@@ -71,6 +72,7 @@ var MovieService = function(apiKey){
             
             callApi(url)
                 .then(convertMovieToBriefDescription)
+                .then(sortByReleaseDate)
                 .then(putInotCache)
                 .then(deferred.resolve, deferred.reject);
         }
@@ -106,6 +108,27 @@ var MovieService = function(apiKey){
             
             return clone;
         });
+    }
+    
+    function sortByReleaseDate(movies) {
+        function compare(a,b) {
+            
+            if(a.releaseDate && b.releaseDate) {
+                if (a.releaseDate < b.releaseDate) {return -1;}
+                if (a.releaseDate > b.releaseDate) {return 1;}
+                return 0;
+            }
+            
+            if(a.title && b.title) {
+                if (a.title < b.title) {return -1;}
+                if (a.title > b.title) {return 1;}
+                return 0;
+            } 
+            
+        }
+        
+        movies.sort(compare);
+        return movies;
     }
     
     function convertMovieToBriefDescription(moviesData) {                  

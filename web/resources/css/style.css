@@ -16,13 +16,13 @@ body {
 }
 
 .movie-list .movie {
-    border-left: 3px solid white;
+    border-left: 3px solid transparent;
     padding-left: 4px;
     cursor: pointer;
 }
 
 .movie-list .movie.selected {
-    border-left: 3px solid black;
+    border-left: 3px solid #fff;
 }
 
 .movie-list .movie.selected h4 {

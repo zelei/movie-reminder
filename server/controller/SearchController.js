@@ -13,12 +13,12 @@ var Controller = function() {
         }
         
         if(!req.query.q) {
-            res.send(500, {status:500, message: 'internal error', type:'internal'});
+            res.send(500);
             return;
         }
         
         movieService.search(req.query.q, req.user.id)
-            .then(function(shortDesciptinos) {ResponseUtil.writeJsonToResponse(res, shortDesciptinos);}
+            .then(function(movies) {ResponseUtil.writeJsonToResponse(res, movies);}
                 , function(err) {ResponseUtil.writeErrorToResponse(res, err);});
             
     }

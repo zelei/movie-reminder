@@ -2,6 +2,7 @@
 
 <% block 'javascript' : %>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
     <script src="client/service/MovieService.js"></script>
     <script src="client/controller/SearchWebController.js"></script>
     <script src="client/controller/UpcomingWebController.js"></script>
@@ -86,7 +87,7 @@
                                             <p>
                                                 <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
                                             </p>
-                                            <p>{{movie.synopsis}}</p>
+                                            <zippy synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></zippy>
                                         </div>
                                     </li> 
                                 </ul>
