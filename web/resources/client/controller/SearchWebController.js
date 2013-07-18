@@ -2,10 +2,12 @@
 
 /* Controllers */
 
-function SearchWebController($rootScope, $scope, movieService) {
+function SearchWebController($rootScope, $scope, movieService, _) {
 
     $scope.movies = [];
 
+    $scope.openedDescription = [];
+    
     $scope.searching = false;
     
     $scope.query = '';
@@ -30,15 +32,16 @@ function SearchWebController($rootScope, $scope, movieService) {
     
     $scope.search = function() {
         if(!$scope.query) {
-            console.log("return empty array");
             $scope.movies = [];
+            $scope.openedDescription = []
             return;
         }
         
         startSearching();     
         movieService.search($scope.query).then(function(data) {
-            $scope.movies = data;
-        }).then(stopSearching);
+            return ($scope.movies = data);
+        }).then(removeUnusedIds)
+          .then(stopSearching);
 
     };
 
@@ -50,4 +53,9 @@ function SearchWebController($rootScope, $scope, movieService) {
       $scope.searching = false;  
     }
 
+    function removeUnusedIds(upcomingMovies) {
+        var movieIds = _.map(upcomingMovies, function(movie){ return movie.id; });
+        $scope.openedDescription = _.intersection($scope.openedDescription, movieIds);   
+    }
+    
 }

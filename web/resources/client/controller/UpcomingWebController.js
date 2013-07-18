@@ -31,7 +31,8 @@ function UpcomingWebController($rootScope, $scope, movieService, _) {
         startLoading();
         movieService.listUpcomingMovies().then(function(data) {
             return ($scope.upcomingMovies = data);
-        }).then(removeUnusedIds).then(stopLoading);    
+        }).then(removeUnusedIds)
+          .then(stopLoading);    
     };
     
     function startLoading() {

@@ -26,7 +26,8 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
         startLoading();
         movieService.listMyMovies().then(function(data) {
             return ($scope.movies = data);
-        }).then(removeUnusedIds).then(stopLoading);    
+        }).then(removeUnusedIds)
+          .then(stopLoading);    
     };
 
     function startLoading() {

@@ -78,7 +78,7 @@
                                                 <p>
                                                     <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
                                                 </p>
-                                                <p>{{movie.synopsis}}</p>
+                                                <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
                                             </div>
                                         </li>    
                                     </ul>
