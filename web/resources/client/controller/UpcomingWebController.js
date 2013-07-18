@@ -20,7 +20,7 @@ function UpcomingWebController($rootScope, $scope, movieService, _) {
         }); 
     });
     
-    $scope.select = function(movie) {       
+    $scope.select = function(movie) {
         var service = movie.selected ? movieService.unmark(movie.id) : movieService.mark(movie.id);
         service.then(function() {
             $rootScope.$broadcast('upcoming-selection-change', movie.id);

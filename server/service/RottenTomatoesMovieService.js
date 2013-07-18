@@ -37,7 +37,7 @@ var MovieService = function(apiKey){
                 return callApi('/api/public/v1.0/movies/'+movieId+'.json?apikey=' + apiKey);
             }));
         }).then(function(movies){
-            return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies})
+            return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies});
         }).then(sortByReleaseDate).then(deferred.resolve, deferred.reject);
             
         return deferred.promise;        

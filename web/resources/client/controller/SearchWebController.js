@@ -12,7 +12,7 @@ function SearchWebController($rootScope, $scope, movieService, _) {
     
     $scope.query = '';
 
-    ['watchlist-selection-change'].forEach(function(name) {
+    ['watchlist-selection-change', 'upcoming-selection-change'].forEach(function(name) {
         $rootScope.$on(name, function(event, movieId) {
             $scope.movies.forEach(function(movie) {
                 if(movie.id == movieId) {
