@@ -16,6 +16,10 @@ body {
     margin-top: 5px;    
 }
 
+.movie-list .movie-title {
+    max-width: 450px;
+}
+
 .movie-list li, .search-list li {
     margin-bottom: 10px;
 }
@@ -23,7 +27,6 @@ body {
 .movie-list .movie {
     border-left: 3px solid transparent;
     padding-left: 4px;
-    cursor: pointer;
 }
 
 .movie-list .movie.selected {

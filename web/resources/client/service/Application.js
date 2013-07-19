@@ -37,8 +37,8 @@ app.directive('read', function($compile, _){
 
         var expandableTemplate = 
                 '<div>' +
-                  '<span ng-show="!open">{{shortDescription}}</span>&nbsp;<span ng-show="!open" ng-click="readMore($event, key)" class="label label-inverse">read more</span>'+
-                  '<span ng-show="open">{{synopsis}}</span>&nbsp;<span ng-show="open" ng-click="readLess($event, key)" class="label label-inverse">read less</span>' +
+                  '<span ng-show="!open">{{shortDescription}}</span>&nbsp;<span ng-show="!open" ng-click="readMore($event, key)" class="pointer label label-inverse">read more</span>'+
+                  '<span ng-show="open">{{synopsis}}</span>&nbsp;<span ng-show="open" ng-click="readLess($event, key)" class="pointer label label-inverse">read less</span>' +
                 '</div>';
                 
         element.html($compile( expandableTemplate )( scope ));
@@ -54,7 +54,7 @@ app.directive('read', function($compile, _){
         scope: { synopsis : '@synopsis', key : '@key', keyStore : "=keyStore" },
         link: function(scope, element, attrs) {
             
-            scope.$watch('synopsis', function(val) {
+            scope.$watch('synopsis', function(val) {   
                 var words = val.split(" ");
                 var shortDescriptionWordCount = 6;  
                 
