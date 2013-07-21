@@ -47,7 +47,7 @@
         <div class="jumbotron">
             <blockquote ng-controller="QuoteWebController" ng-cloak>
                 <h3>{{quote.text}}</h3>	
-                <small class="pull-right">{{quote.character}} - <cite title="Source Title">{{quote.movie}}</cite></small>
+                <small class="pull-right">{{quote.character}} - <cite class="pointer" ng-click="select(quote)">{{quote.movie}}</cite></small>
             </blockquote>
             <% if !@user : %>
                 <a class="btn btn-large btn-success" href="/auth/google">Sign In with Google</a>
