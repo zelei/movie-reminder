@@ -1,0 +1,42 @@
+<div ng-controller="WatchListWebController"> 
+    <h3>
+        <% if @user : %>
+            <span class="pointer" ng-click="loadData()">WATCH LIST</span>
+            <span ng-show="loading" ng-cloak>...</span>
+        <% else : %>  
+            <span data-toggle="tooltip">WATCH LIST</span>    
+        <% end %>                              
+    </h3>
+    
+    <% if @user : %>
+    
+        <ul class="unstyled movie-list" ng-cloak>
+            <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
+                <div class="media">     
+                	<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+            		<h4 class="movie-title">
+                        <span>{{movie.title}}&nbsp;</span>
+                        <% if @user : %>
+                            <i ng-click="select(movie)" class="pointer icon-white icon-minus-sign"></i>  
+                            <i class="pointer icon-white icon-share-alt" share-movie="{{movie.id}}" share-movie-template="share-movies-template.html"></i>
+                        <% end %>
+                    </h4>
+                    <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>       
+                    <div>
+                        <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                    </div>
+                    <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
+                </div>
+            </li> 
+        </ul>
+                         
+        <div ng-show="movies.length == 0 && !loading" class="alert alert-info" ng-cloak>
+            Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
+        </div>                        
+    <% else : %>  
+        <div class="alert alert-info" ng-cloak>
+            !!Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo
+        </div>
+    <% end %>           
+    
+</div>

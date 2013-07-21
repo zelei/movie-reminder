@@ -1,0 +1,24 @@
+<div ng-controller="UpcomingWebController"> 
+    <h3>
+        <span class="pointer" ng-click="loadData()">COMING SOON</span>
+        <span ng-show="loading" ng-cloak>...</span>
+    </h3>
+    <ul class="unstyled movie-list" ng-cloak>
+        <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
+            <div class="media">     
+        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+        	    <h4 class="movie-title">
+                    <span>{{movie.title}}&nbsp;</span>
+                    <% if @user : %>
+                        <i ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus-sign': movie.selected, 'icon-plus-sign': !movie.selected}"></i>        
+                    <% end %>                          
+                </h4>
+                <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>
+                <div>
+                    <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                </div>
+                <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
+            </div>
+        </li> 
+    </ul>
+</div>

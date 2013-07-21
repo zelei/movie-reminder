@@ -1,0 +1,34 @@
+<div ng-controller="SearchWebController">
+                     
+    <form class="form-search" ng-submit="search()">
+        <input type="text" ng-model="query" ng-change="search()" ng-minlength="3" class="input-large search-query">    
+        <button type="submit" class="btn" ng-disabled="searching">Search</button>
+    </form>
+                  
+    <h3 ng-cloak ng-show="movies.length != 0 || query.length != 0">
+        <span ng-click="loadData()">SEARCH LIST</span>
+        <span ng-show="searching" ng-cloak>...</span> 
+    </h3> 
+    
+    <span ng-cloak ng-show="movies.length == 0 && query.length != 0 && !searching">No result.</span>
+    
+    <ul class="unstyled movie-list" ng-cloak>
+        <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
+            <div class="media">     
+            	<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+    	        <h4 class="movie-title">
+                    <span>{{movie.title}}&nbsp;</span>
+                    <% if @user : %>
+                        <i ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus-sign': movie.selected, 'icon-plus-sign': !movie.selected}"></i>        
+                    <% end %>                          
+                </h4>
+                <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>           
+                <div>
+                    <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
+                </div>
+                <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
+            </div>
+        </li>    
+    </ul>
+
+</div> 

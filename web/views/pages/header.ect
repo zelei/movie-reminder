@@ -1,0 +1,20 @@
+<div class="masthead">
+            
+    <div class="pull-right">
+        <% if @user : %>
+
+            <div class="btn-group">
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    Hello <%- @user.name %>! &nbsp;<span class="caret"></span>    
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="/logout"><i class="icon-off"></i>&nbsp;Sign out</a></li>
+                </ul>
+            </div>
+      
+        <% end : %>           
+    </div>
+    
+    <h2 class="muted">Movie Reminder</h2>
+              
+</div>

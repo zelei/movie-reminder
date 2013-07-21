@@ -40,7 +40,7 @@ function SearchWebController($rootScope, $scope, movieService, _) {
     $scope.search = function() {
         if(!$scope.query) {
             $scope.movies = [];
-            $scope.openedDescription = []
+            $scope.openedDescription = [];
             return;
         }
         
