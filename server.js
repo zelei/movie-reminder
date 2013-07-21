@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'production';
+
 var passport = require('passport');
 var context = require("rekuire")("webconfiguration");
 var env = require("rekuire")("env");
@@ -29,6 +31,6 @@ context.app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-console.log('Listening on port ', env.ip , env.port);
+console.log('Listening on port ', env.ip , env.port, process.env.NODE_ENV);
 
 context.app.listen(env.port, env.ip);
