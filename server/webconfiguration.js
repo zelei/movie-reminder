@@ -35,9 +35,10 @@ app.configure(function() {
   app.engine('.ect', ect({ watch: true, root: templateDirectory }).render);
 
   // Express
-  app.use(express.static(env.root + '/web/resources'));
-  //app.use(express.logger());
   app.use(express.compress());
+  app.use("/static", express.static(env.root + '/web/resources', { maxAge: 86400000 }));
+  //app.use(express.logger());
+
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.session({ secret: 'keyboard cat' }));
