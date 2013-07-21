@@ -156,7 +156,6 @@ var MovieService = function(apiKey){
             
                 return new Movie( 
                           movie.id
-                        , movie.alternate_ids.imdb
                         , movie.title
                         , movie.posters.thumbnail
                         , movie.synopsis

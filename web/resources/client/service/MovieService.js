@@ -2,6 +2,12 @@ var app = app || {};
 
 var movieService = function($http, $q) {
 
+    this.getRandomQuote = function() {
+        var deferred = $q.defer();      
+        $http.get('/movie/quote').success(deferred.resolve).error(deferred.reject);
+        return deferred.promise;
+    };
+    
     this.search = function(query) {
         var deferred = $q.defer();      
         $http.get('/movie/search?q=' + query).success(deferred.resolve).error(deferred.reject);

@@ -1,12 +1,19 @@
 <% extend 'templates/default.ect' %>
 
 <% block 'javascript' : %>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+
+    <script type="text/ng-template" id="share-movies-template.html">
+        <img src="https://www.gstatic.com/images/icons/gplus-16.png" />
+        <img src="https://profile-a.xx.fbcdn.net/hprofile-prn2/188045_20531316728_499936717_q.jpg" style="width: 16px; height: 16px" />
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
-    
+
     <script src="client/service/Application.js"></script>
     <script src="client/service/MovieService.js"></script>
-    
+
+    <script src="client/controller/QuoteWebController.js"></script>
     <script src="client/controller/SearchWebController.js"></script>
     <script src="client/controller/UpcomingWebController.js"></script>
     <script src="client/controller/WatchListWebController.js"></script>
@@ -38,12 +45,14 @@
         <hr>
     
         <div class="jumbotron">
-            <h1>Super awesome shit!</h1>
-            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            
+            <blockquote ng-controller="QuoteWebController" ng-cloak>
+                <h3>{{quote.text}}</h3>	
+                <small class="pull-right">{{quote.character}} - <cite title="Source Title">{{quote.movie}}</cite></small>
+            </blockquote>
             <% if !@user : %>
                 <a class="btn btn-large btn-success" href="/auth/google">Sign In with Google</a>
-            <% end %>        
+            <% end %>
+            <div class="clearfix"></div>
         </div>
     
         <hr>
@@ -139,8 +148,9 @@
                                 		<h4 class="movie-title">
                                             <span>{{movie.title}}&nbsp;</span>
                                             <% if @user : %>
-                                                <i ng-click="select(movie)" class="pointer icon-white icon-minus-sign"></i>        
-                                            <% end %>                          
+                                                <i ng-click="select(movie)" class="pointer icon-white icon-minus-sign"></i>  
+                                                <i class="pointer icon-white icon-share-alt" share-movie="{{movie.id}}" share-movie-template="share-movies-template.html"></i>
+                                            <% end %>
                                         </h4>
                                         <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>       
                                         <div>

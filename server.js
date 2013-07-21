@@ -9,6 +9,8 @@ context.app.get('/', env.require("/server/controller/IndexController"));
 
 context.app.get('/movie/search', searchController.search);
 
+context.app.get('/movie/quote', movieController.randomQuote);
+
 context.app.get('/movie/mymovies', movieController.myMovies);
 
 context.app.get('/movie/upcoming', movieController.upcoming);

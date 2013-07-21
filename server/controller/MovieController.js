@@ -1,10 +1,20 @@
 var env = require("rekuire")("env");
 var ResponseUtil = env.require("/server/util/ResponseUtil");
 var movieService = env.require("/server/service/RottenTomatoesMovieService");
+var quoteService = env.require("/server/service/QuoteService");
 var userRepository = env.require("/server/service/repository/UserRepository");
 
 var Controller = function() {
 
+    this.randomQuote = function(req, res){
+            
+        quoteService.getRandomQuote().then(
+              function(quote) {ResponseUtil.writeJsonToResponse(res, quote);}
+            , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+            );
+    
+    };
+    
     this.myMovies = function(req, res){
     
         if(!req.user) {

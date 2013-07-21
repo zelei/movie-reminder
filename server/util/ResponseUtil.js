@@ -6,6 +6,7 @@ var Util = {
     },
     
     writeErrorToResponse : function(res, error){
+        console.log(error);
         res.writeHead(500);
         error ? res.end(JSON.stringify(error)) : res.end()
     }
