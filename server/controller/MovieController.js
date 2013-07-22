@@ -1,5 +1,4 @@
 var env = require("rekuire")("env");
-var ResponseUtil = env.require("/server/util/ResponseUtil");
 var movieService = env.require("/server/service/RottenTomatoesMovieService");
 var quoteService = env.require("/server/service/QuoteService");
 var userRepository = env.require("/server/service/repository/UserRepository");
@@ -9,8 +8,8 @@ var Controller = function() {
     this.randomQuote = function(req, res){
             
         quoteService.getRandomQuote().then(
-              function(quote) {ResponseUtil.writeJsonToResponse(res, quote);}
-            , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+              function(quote) {res.json(quote)}
+            , function(err) {res.json(500, err)}
             );
     
     };
@@ -18,13 +17,13 @@ var Controller = function() {
     this.myMovies = function(req, res){
     
         if(!req.user) {
-            ResponseUtil.writeJsonToResponse(res, []);
+            res.json([]);
             return;
         }
         
         movieService.listMarkedMoviesForUser(req.user.id).then(
-              function(movies) {ResponseUtil.writeJsonToResponse(res, movies);}
-            , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+              function(movies) {res.json(movies)}
+            , function(err) {res.json(500, err)}
             );
     
     };
@@ -40,8 +39,8 @@ var Controller = function() {
         }
         
         listFunction.then(
-              function(movies) {ResponseUtil.writeJsonToResponse(res, movies);}
-            , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+              function(movies) {res.json(movies)}
+            , function(err) {res.json(500, err)}
             );
     
     };
@@ -61,8 +60,8 @@ var Controller = function() {
         }
         
         userRepository.markMovie(req.user.id, req.body.id)
-            .then(function() {ResponseUtil.writeJsonToResponse(res);}
-                , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+            .then(function() {res.json(200)}
+                , function(err) {res.json(500, err)}
             );
         
     };
@@ -82,8 +81,8 @@ var Controller = function() {
         }
         
         userRepository.unmarkMovie(req.user.id, req.body.id)
-            .then(function() {ResponseUtil.writeJsonToResponse(res);}
-                , function(err) {ResponseUtil.writeErrorToResponse(res, err);}
+            .then(function() {res.json(200)}
+                , function(err) {res.json(500, err)}
             );
             
     };

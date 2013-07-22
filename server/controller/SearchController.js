@@ -1,5 +1,4 @@
 var env = require("rekuire")("env");
-var ResponseUtil = env.require("/server/util/ResponseUtil");
 var movieService = env.require("/server/service/RottenTomatoesMovieService");
 
 var Controller = function() {
@@ -18,11 +17,11 @@ var Controller = function() {
         }
         
         movieService.search(req.query.q, req.user.id)
-            .then(function(movies) {ResponseUtil.writeJsonToResponse(res, movies);}
-                , function(err) {ResponseUtil.writeErrorToResponse(res, err);});
+            .then(function(movies) {res.json(movies)}
+                , function(err) {res.json(500, err)});
             
-    }
+    };
 
-}
+};
 
 module.exports = { getInstance : function() {return new Controller()}};
