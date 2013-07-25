@@ -4,7 +4,7 @@ var ect = require('ect');
 var logger = require('winston');
 var passport = require('passport');
 var User = env.require("/server/model/User");
-var GoogleStrategy = require('passport-google').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var templateDirectory = env.root + '/web/views';
 
@@ -35,20 +35,19 @@ app.configure(function() {
 });
 
 passport.use(new GoogleStrategy({
-    returnURL: env.host + '/auth/google/return',
-    realm: env.host
-    },  function(identifier, profile, done) {
-           
-            var query = {"id": identifier};
-            var options = {upsert: true};
-            var user = {"id": identifier, "name": profile.name.givenName};
-                  
-            User.findOneAndUpdate(query, user, options, function(err, person) {
-                done(err, person);
-            });
-            
-        }
-  
+    clientID: "678201232526.apps.googleusercontent.com",
+    clientSecret: "B6Cgp--Ne_MXhxOC8ak_-0au",
+    callbackURL: env.host + "/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+        var query = {"id": profile.id};
+        var options = {upsert: true};
+        var user = {"id": profile.id, "name": profile.name.givenName, "accessToken": accessToken};
+              
+        User.findOneAndUpdate(query, user, options, function(err, person) {
+            done(err, person);
+        });
+  }
 ));
 
 passport.serializeUser(function(user, done) {

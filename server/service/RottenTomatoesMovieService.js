@@ -1,9 +1,8 @@
 var env = require("rekuire")("env");
-var http = require("http");
+var request = require('request');
 var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
-var jsonUtil = env.require("/server/util/JsonUtil");
 
 var UserRepository = env.require("/server/service/repository/UserRepository");
 
@@ -83,17 +82,14 @@ var MovieService = function(apiKey){
     
     function callApi(url) {
         
-        var options = {
-            host: 'api.rottentomatoes.com',
-            port: 80,
-            path: url  
-        };
-        
         var deferred = when.defer();
         
-        http.get(options, function(response) {
-            jsonUtil.responseToJson(response).then(deferred.resolve);     
-        }).on('error', deferred.reject);  
+        var callback = function (error, response, body) {
+            if(error) deferred.reject(error);
+            deferred.resolve(body);
+        };
+        
+        request.get({url : "http://api.rottentomatoes.com" + url, json: true}, callback);  
         
         return deferred.promise;
     }
