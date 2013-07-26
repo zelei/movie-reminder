@@ -1,6 +1,5 @@
 process.env.NODE_ENV = 'production';
 
-var request = require('request');
 var passport = require('passport');
 var context = require("rekuire")("webconfiguration");
 var env = require("rekuire")("env");
@@ -44,22 +43,6 @@ context.app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
-
-
-context.app.get('/calendar', function(req, res){
-
-    var callback = function (error, response, body) {
-        if(error) return res.send(500,error);
-        return res.send(body);
-    };
-    
-    var uri = "https://www.googleapis.com/calendar/v3/calendars?access_token=" + req.user.accessToken;
-    var body = {"summary" : "Movie Reminder"};
-    
-    request({ method: 'POST', uri: uri, json:true, body: body }, callback);
-
-});
-
 
 console.log('Listening on port ', env.ip , env.port, process.env.NODE_ENV);
 

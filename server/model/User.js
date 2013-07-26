@@ -6,6 +6,7 @@ var userSchema = new database.mongoose.Schema({
   id: { type: String, required: true },
   name: { type: String, required: true },
   accessToken: { type: String, required: true },
+  calendarId: { type: String, required: false },
   selectedMovies: [Number]
 });
 

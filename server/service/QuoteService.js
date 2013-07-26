@@ -1,7 +1,7 @@
 var when = require("when");
 var cache = require('memory-cache');
 
-var QuoteService = function(sheetKey){
+var QuoteService = function(){
 
     this.getRandomQuote = function() {
         
@@ -39,4 +39,4 @@ var QuoteService = function(sheetKey){
     
 };
 
-module.exports = new QuoteService("g2s78atyq2725dc65zau9cyv");
+module.exports = new QuoteService();

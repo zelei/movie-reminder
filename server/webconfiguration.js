@@ -3,7 +3,7 @@ var express = require('express');
 var ect = require('ect');
 var logger = require('winston');
 var passport = require('passport');
-var User = env.require("/server/model/User");
+var SignInService = env.require("/server/service/SignInService");
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var templateDirectory = env.root + '/web/views';
@@ -38,24 +38,14 @@ passport.use(new GoogleStrategy({
     clientID: "678201232526.apps.googleusercontent.com",
     clientSecret: "B6Cgp--Ne_MXhxOC8ak_-0au",
     callbackURL: env.host + "/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-        var query = {"id": profile.id};
-        var options = {upsert: true};
-        var user = {"id": profile.id, "name": profile.name.givenName, "accessToken": accessToken};
-              
-        User.findOneAndUpdate(query, user, options, function(err, person) {
-            done(err, person);
-        });
-  }
-));
+  }, SignInService.signIn));
 
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(undefined, user);
 });
 
 passport.deserializeUser(function(user, done) {
-    done(null, user);
+    done(undefined, user);
 });
 
 
