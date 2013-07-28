@@ -131,7 +131,7 @@ var MovieService = function(apiKey){
                 }
             
                 return new Movie( 
-                          movie.id
+                          String(movie.id)
                         , movie.title
                         , movie.posters.thumbnail
                         , movie.synopsis

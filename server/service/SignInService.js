@@ -28,6 +28,7 @@ var SignInService = function(){
                 
                 logger.info("Create new calendar(%s) for user(%s).", calendar.id, user.id);
                 UserRepository.setCalendarId(user.id, calendar.id).then(function() {
+                    user.calendarId = calendar.id;
                     deferred.resolve(user);       
                 });
                 

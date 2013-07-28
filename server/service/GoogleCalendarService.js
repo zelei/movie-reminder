@@ -40,8 +40,11 @@ var GoogleCalendarService = function(sheetKey){
                   , "description": movie.synopsis 
                   , "start": {"date": movie.releaseDate}
                   , "end": {"date": movie.releaseDate}
-                  , "creator" : {"displayName" : "Movie Reminder", "self" : false}
-                  , "transparency": "transparent"};
+                  , "transparency": "transparent"
+                  , "reminders": { 
+                          "useDefault": false
+                        , "overrides": [ { "method": "email", "minutes": 0 } ] }
+                  };
     
         logger.info("Create a new event for '%s' movie", movie.title);
         request({ method: 'POST', uri: uri, json:true, body: body }, callback);
@@ -63,9 +66,7 @@ var GoogleCalendarService = function(sheetKey){
     
         var uri = "https://www.googleapis.com/calendar/v3/calendars/"+calendarId+"/events/"+eventId+"?access_token=" + accessToken;
         
-        logger.info("Delete event(%s) form calendar(%s)", eventId, calendarId);
-        logger.info(uri);
-        
+        logger.info("Delete event(%s) form calendar(%s)", eventId, calendarId);        
         request({ method: 'DELETE', uri: uri, json:true}, callback);
         
         return deferred.promise; 

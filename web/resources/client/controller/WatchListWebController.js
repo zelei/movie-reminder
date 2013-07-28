@@ -39,8 +39,8 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
     }
     
     function removeUnusedIds(movies) {
-        var movieIds = _.map(movies, function(movie){ return movie.id; });
-        $scope.openedDescription = _.intersection($scope.openedDescription, movieIds);   
+        var movieIds = _.map(movies, function(movie){ return movie.id; }); 
+        $scope.openedDescription = _.intersection($scope.openedDescription, movieIds);
     }
     
     //init

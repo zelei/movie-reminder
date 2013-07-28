@@ -59,9 +59,7 @@ var Controller = function() {
             return;
         }
                
-        var movie = JSON.parse(req.body.movie);
-        
-        userService.markMovie(req.user.accessToken, req.user.calendarId, req.user.id,  movie)
+        userService.markMovie(req.user, JSON.parse(req.body.movie))
             .then(function() {res.json(200)}, function(err) {res.json(500, err)});
         
     };
@@ -80,7 +78,7 @@ var Controller = function() {
             return;
         }
 
-        userService.unmarkMovie(req.user.accessToken, req.user.calendarId, req.user.id, req.body.id)
+        userService.unmarkMovie(req.user, req.body.id)
             .then(function() {res.json(200)}, function(err) {res.json(500, err)});
         
     };

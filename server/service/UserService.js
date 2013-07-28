@@ -5,40 +5,29 @@ var CalendarService = env.require("/server/service/GoogleCalendarService");
 
 var UserService = function() {
 
-    this.markMovie = function(accessToken, calendarId, userId,  movie){
+    this.markMovie = function(user, movie){
+        
+        console.log(user);
         
         var deferred = when.defer();
          
-        CalendarService.createEvent(accessToken, calendarId, movie)
-        .then(function(event) {
-            return userRepository.markMovie(userId, movie.id, event.id);
+        CalendarService.createEvent(user.accessToken, user.calendarId, movie).then(function(event) {
+            return userRepository.markMovie(user.id, movie.id, event.id);
         }).then(deferred.resolve, deferred.reject);
            
         return deferred.promise; 
     };
     
-    this.unmarkMovie = function(accessToken, calendarId, userId, movieId){
+    this.unmarkMovie = function(user, movieId){
         
         var deferred = when.defer();
+                
+        userRepository.getEventId(user.id, movieId).then(function(eventId) {
+            return CalendarService.removeEvent(user.accessToken, user.calendarId, eventId);
+        }).then(function() {
+            return userRepository.unmarkMovie(user.id, movieId);
+        }).then(deferred.resolve, deferred.reject);
         
-        userRepository.findOne(userId).then(function(user) {
-        
-            var eventId;
-            user.selectedMovies.forEach(function(selectedMovie) {
-                if(selectedMovie.movieId == movieId) {
-                    eventId = selectedMovie.eventId;
-                    return false;
-                }
-            });
-    
-            CalendarService.removeEvent(accessToken, calendarId, eventId)
-            .then(function() {
-                return userRepository.unmarkMovie(userId, movieId);
-            }).then(deferred.resolve, deferred.reject);
-        
-        });
-        
-
         return deferred.promise;     
     };
 
