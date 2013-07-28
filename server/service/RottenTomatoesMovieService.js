@@ -1,4 +1,5 @@
 var env = require("rekuire")("env");
+var WhenUtil = env.require("/server/util/WhenUtil");
 var request = require('request');
 var when = require("when");
 var cache = require('memory-cache');
@@ -32,8 +33,8 @@ var MovieService = function(apiKey){
         var deferred = when.defer();
         
         UserRepository.findById(userId).then(function(user) {
-            return when.all(user.selectedMovies.map(function(movieId) {
-                return callApi('/api/public/v1.0/movies/'+movieId+'.json?apikey=' + apiKey);
+            return when.all(user.selectedMovies.map(function(selectedMovie) {
+                return callApi('/api/public/v1.0/movies/'+selectedMovie.movieId+'.json?apikey=' + apiKey);
             }));
         }).then(function(movies){
             return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies});
@@ -83,22 +84,24 @@ var MovieService = function(apiKey){
     function callApi(url) {
         
         var deferred = when.defer();
-        
-        var callback = function (error, response, body) {
-            if(error) deferred.reject(error);
-            deferred.resolve(body);
-        };
-        
-        request.get({url : "http://api.rottentomatoes.com" + url, json: true}, callback);  
+                
+        request.get({url : "http://api.rottentomatoes.com" + url, json: true}, function (error, response, body) {
+            WhenUtil.call(deferred, error, body);
+        });  
         
         return deferred.promise;
     }
     
-    function markSelectedMovies(movies, selectedMovies) {      
+    function markSelectedMovies(movies, selectedMovies) {
+        
+        var selectedMovieIds = selectedMovies.map(function(selectedMovie) {
+           return selectedMovie.movieId; 
+        });
+        
         return movies.map(function(movie) {
             var clone = movie.clone();
             
-            if(selectedMovies.indexOf(clone.id) != -1) {
+            if(selectedMovieIds.indexOf(clone.id) != -1) {
                 clone.selected = true;
             }
             
@@ -107,30 +110,7 @@ var MovieService = function(apiKey){
     }
     
     function sortByReleaseDate(movies) {
-        function compare(a,b) {
-            
-            if(a.releaseDate && b.releaseDate) {
-                
-                if (a.releaseDate < b.releaseDate) {return -1;}
-                if (a.releaseDate > b.releaseDate) {return 1;}
-                
-                if(a.title && b.title) {
-                    if (a.title < b.title) {return -1;}
-                    if (a.title > b.title) {return 1;}
-                    return 0;
-                } 
-            
-            }
-            
-            if(a.title && b.title) {
-                if (a.title < b.title) {return -1;}
-                if (a.title > b.title) {return 1;}
-                return 0;
-            } 
-            
-        }
-        
-        movies.sort(compare);
+        movies.sort(Movie.compare);
         return movies;
     }
     

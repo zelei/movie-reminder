@@ -21,7 +21,7 @@ app.configure(function() {
   // Express
   app.use(express.compress());
   app.use("/static", express.static(env.root + '/web/resources', { maxAge: 86400000 }));
-  app.use(express.logger());
+ // app.use(express.logger());
 
   app.use(express.cookieParser());
   app.use(express.bodyParser());

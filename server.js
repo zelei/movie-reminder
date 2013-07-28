@@ -26,18 +26,10 @@ context.app.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
                                             'https://www.googleapis.com/auth/userinfo.email',
                                             'https://www.googleapis.com/auth/calendar'] }),
-  function(req, res){
-    // The request will be redirected to Google for authentication, so this
-    // function will not be called.
-  });
+  function(req, res){}
+);
 
-
-context.app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
+context.app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {res.redirect('/');});
 
 context.app.get('/logout', function(req, res){
   req.logout();

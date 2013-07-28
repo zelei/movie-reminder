@@ -6,6 +6,18 @@ var User = env.require("/server/model/User");
 
 var UserRepository = function() {
 
+    this.findOne = function(userId) {
+        var deferred = when.defer();
+                        
+        var query = {"id": userId};
+              
+        User.findOne(query, function(err, user) {
+            WhenUtil.call(deferred, err, user);
+        });
+        
+        return deferred.promise; 
+    };
+    
     this.findOneAndUpdate = function(userId, userName, accessToken) {
         var deferred = when.defer();
                         
@@ -14,7 +26,7 @@ var UserRepository = function() {
         var user = {"id": userId, "name": userName, "accessToken": accessToken};
               
         User.findOneAndUpdate(query, user, options, function(err, user) {
-            WhenUtil.call(deferred, err, user);
+            WhenUtil.call(deferred, err, {'id' : user.id, 'name' : user.name, 'accessToken': accessToken, 'calendarId' : user.calendarId});
         });
         
         return deferred.promise; 
@@ -40,11 +52,11 @@ var UserRepository = function() {
         return deferred.promise; 
     };
     
-    this.markMovie = function(userId, movieId) {
+    this.markMovie = function(userId, movieId, eventId) {
         
         var deferred = when.defer();
         
-        User.update({'id': userId}, {'$addToSet': {'selectedMovies': movieId}}, function(err) {
+        User.update({'id': userId}, {'$addToSet': {'selectedMovies': {'movieId' : movieId, 'eventId' : eventId}}}, function(err) {
            WhenUtil.call(deferred, err, userId);
         });
         
@@ -55,13 +67,13 @@ var UserRepository = function() {
         
         var deferred = when.defer();
         
-        User.update({'id': userId}, {'$pull': {'selectedMovies': movieId}}, function(err) {
+        User.update({'id': userId}, {'$pull': {'selectedMovies': {'movieId' : movieId}}}, function(err) {
             WhenUtil.call(deferred, err, userId);
         });
         
         return deferred.promise;    
     };
     
-}
+};
 
 module.exports = new UserRepository();

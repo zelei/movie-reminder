@@ -1,4 +1,5 @@
 var when = require("when");
+var logger = require('winston');
 var request = require('request');
 
 var GoogleCalendarService = function(sheetKey){
@@ -19,8 +20,56 @@ var GoogleCalendarService = function(sheetKey){
     
         return deferred.promise;
     
-    }
+    };
     
+    this.createEvent = function(accessToken, calendarId, movie) {
+        var deferred = when.defer();
+        
+        var callback = function (error, response, event) {
+            if(response.statusCode == 200) {
+                logger.info("Event(%s) was created.", event.id);
+                deferred.resolve(event);
+            } else {
+                logger.info(event.error);
+                deferred.reject(event.error);     
+            }
+        };
+    
+        var uri = "https://www.googleapis.com/calendar/v3/calendars/"+calendarId+"/events?access_token=" + accessToken;
+        var body = {"summary": movie.title
+                  , "description": movie.synopsis 
+                  , "start": {"date": movie.releaseDate}
+                  , "end": {"date": movie.releaseDate}
+                  , "creator" : {"displayName" : "Movie Reminder", "self" : false}
+                  , "transparency": "transparent"};
+    
+        logger.info("Create a new event for '%s' movie", movie.title);
+        request({ method: 'POST', uri: uri, json:true, body: body }, callback);
+        
+        return deferred.promise; 
+    };
+    
+    this.removeEvent = function(accessToken, calendarId, eventId) {
+        var deferred = when.defer();
+        
+        var callback = function (error, response, event) {
+            if(response.statusCode == 204) {
+                logger.info("Event was removed.");
+                deferred.resolve();
+            } else {         
+                deferred.reject(error);     
+            }
+        };
+    
+        var uri = "https://www.googleapis.com/calendar/v3/calendars/"+calendarId+"/events/"+eventId+"?access_token=" + accessToken;
+        
+        logger.info("Delete event(%s) form calendar(%s)", eventId, calendarId);
+        logger.info(uri);
+        
+        request({ method: 'DELETE', uri: uri, json:true}, callback);
+        
+        return deferred.promise; 
+    };
     
 };
 

@@ -1,7 +1,7 @@
 var env = require("rekuire")("env");
 var movieService = env.require("/server/service/RottenTomatoesMovieService");
 var quoteService = env.require("/server/service/QuoteService");
-var userRepository = env.require("/server/service/repository/UserRepository");
+var userService = env.require("/server/service/UserService");
 
 var Controller = function() {
 
@@ -53,16 +53,16 @@ var Controller = function() {
             return;
         }
         
-        if(!req.body && !req.body.id) {
+        if(!req.body && !req.body.movie && !req.body.movie.id) {
             res.writeHead(400);
             res.end();
             return;
         }
+               
+        var movie = JSON.parse(req.body.movie);
         
-        userRepository.markMovie(req.user.id, req.body.id)
-            .then(function() {res.json(200)}
-                , function(err) {res.json(500, err)}
-            );
+        userService.markMovie(req.user.accessToken, req.user.calendarId, req.user.id,  movie)
+            .then(function() {res.json(200)}, function(err) {res.json(500, err)});
         
     };
     
@@ -79,12 +79,10 @@ var Controller = function() {
             res.end();
             return;
         }
+
+        userService.unmarkMovie(req.user.accessToken, req.user.calendarId, req.user.id, req.body.id)
+            .then(function() {res.json(200)}, function(err) {res.json(500, err)});
         
-        userRepository.unmarkMovie(req.user.id, req.body.id)
-            .then(function() {res.json(200)}
-                , function(err) {res.json(500, err)}
-            );
-            
     };
 
 };

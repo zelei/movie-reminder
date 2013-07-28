@@ -26,15 +26,15 @@ var movieService = function($http, $q) {
         return deferred.promise;  
     };
 
-	this.mark = function(movieId) {
+	this.mark = function(movie) {
         var deferred = $q.defer();
-        $http.post('/movie/mark', {id : movieId}).success(deferred.resolve).error(deferred.reject);
+        $http.post('/movie/mark', {movie : JSON.stringify(movie)}).success(deferred.resolve).error(deferred.reject);
         return deferred.promise;
 	};
     
-    this.unmark = function(movieId) {
+    this.unmark = function(movie) {
         var deferred = $q.defer();
-        $http.post('/movie/unmark', {id : movieId}).success(deferred.resolve).error(deferred.reject); 
+        $http.post('/movie/unmark', {id : movie.id}).success(deferred.resolve).error(deferred.reject); 
         return deferred.promise;
 	};
     

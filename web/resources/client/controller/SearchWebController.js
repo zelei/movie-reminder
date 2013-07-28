@@ -30,7 +30,7 @@ function SearchWebController($rootScope, $scope, movieService, _) {
     });
 
     $scope.select = function(movie) {
-        var service = movie.selected ? movieService.unmark(movie.id) : movieService.mark(movie.id);
+        var service = movie.selected ? movieService.unmark(movie) : movieService.mark(movie);
         service.then(function() {
             movie.selected = !movie.selected;
             $rootScope.$broadcast('searchlist-selection-change', movie.id);

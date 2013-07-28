@@ -16,7 +16,7 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
 
     $scope.select = function(movie) {
         
-        movieService.unmark(movie.id).then(function(data) {
+        movieService.unmark(movie).then(function(data) {
             $rootScope.$broadcast('watchlist-selection-change', movie.id);
         }).then($scope.loadData);  
     
