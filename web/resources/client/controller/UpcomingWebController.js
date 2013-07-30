@@ -21,10 +21,12 @@ function UpcomingWebController($rootScope, $scope, movieService, _) {
     });
     
     $scope.select = function(movie) {
+        movie.saving = true;
         var service = movie.selected ? movieService.unmark(movie) : movieService.mark(movie);
-        service.then(function() {
-            $rootScope.$broadcast('upcoming-selection-change', movie.id);
-        });  
+        
+        service
+        .then(function() { $rootScope.$broadcast('upcoming-selection-change', movie.id); })
+        .then(function() { movie.saving = false; });  
     };
 
     $scope.loadData = function() {

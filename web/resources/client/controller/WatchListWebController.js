@@ -14,20 +14,23 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
         }); 
     });
 
-    $scope.select = function(movie) {
+    $scope.select = function(movie) {    
+        movie.saving = true;
         
-        movieService.unmark(movie).then(function(data) {
-            $rootScope.$broadcast('watchlist-selection-change', movie.id);
-        }).then($scope.loadData);  
-    
+        movieService.unmark(movie)
+        .then(function() { $rootScope.$broadcast('watchlist-selection-change', movie.id);})
+        .then($scope.loadData);  
+        
     };
 
     $scope.loadData = function() {
         startLoading();
-        movieService.listMyMovies().then(function(data) {
-            return ($scope.movies = data);
-        }).then(removeUnusedIds)
-          .then(stopLoading);    
+        
+        movieService.listMyMovies()
+        .then(function(data) { return ($scope.movies = data);})
+        .then(removeUnusedIds)
+        .then(stopLoading);
+        
     };
 
     function startLoading() {

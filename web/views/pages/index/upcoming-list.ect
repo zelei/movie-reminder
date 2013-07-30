@@ -6,11 +6,12 @@
     <ul class="unstyled movie-list" ng-cloak>
         <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
             <div class="media">     
-        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 60px; height: 90px;">
+        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
         	    <h4 class="movie-title">
                     <span>{{movie.title}}&nbsp;</span>
                     <% if @user : %>
-                        <i ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus-sign': movie.selected, 'icon-plus-sign': !movie.selected}"></i>        
+                        <i ng-hide="movie.saving" ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
+                        <i ng-show="movie.saving" class="pointer icon-white icon-ban-circle"></i>        
                     <% end %>                          
                 </h4>
                 <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>

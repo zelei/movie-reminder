@@ -30,11 +30,21 @@ function SearchWebController($rootScope, $scope, movieService, _) {
     });
 
     $scope.select = function(movie) {
+        movie.saving = true;
+        
         var service = movie.selected ? movieService.unmark(movie) : movieService.mark(movie);
-        service.then(function() {
+        
+        service
+        .then(function() {
             movie.selected = !movie.selected;
-            $rootScope.$broadcast('searchlist-selection-change', movie.id);
-        });  
+            $rootScope.$broadcast('searchlist-selection-change', movie.id);})
+        .then(function() { movie.saving = false; });
+              
+    };
+   
+    $scope.clear = function() {
+        $scope.query = ''
+        $scope.movies = [];   
     };
     
     $scope.search = function() {

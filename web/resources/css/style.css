@@ -7,6 +7,10 @@ body {
     padding-bottom: 40px;
 }
 
+li {
+    line-height: 21px;
+}
+
 .pointer { 
     cursor: pointer; 
     cursor: hand; 
@@ -58,3 +62,26 @@ body {
     width: 100%;
     border-left-style: none;
 }
+
+
+.form-search .input-append .add-on:last-child {
+    border-radius: 0 15px 15px 0;
+    background-color: #FFFFFF;
+    border-left-style: none;
+}
+
+.form-search .input-append .search-query {
+    border-right: none;
+}
+
+/* turn off glow effet*/
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {   
+    border-color: inherit;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+.media .movie-title i {
+    margin-bottom: 3px;
+}
+
