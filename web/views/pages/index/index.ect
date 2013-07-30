@@ -14,9 +14,11 @@
     <script src="static/client/service/MovieService.js"></script>
 
     <script src="static/client/controller/QuoteWebController.js"></script>
-    <script src="static/client/controller/SearchWebController.js"></script>
+    <script src="static/client/controller/SearchListWebController.js"></script>
+    <script src="static/client/controller/SearchFormWebController.js"></script>
     <script src="static/client/controller/UpcomingWebController.js"></script>
     <script src="static/client/controller/WatchListWebController.js"></script>
+    
 <% end %>
 
 <% block 'body' : %>
@@ -35,18 +37,17 @@
          
         <div class="row">
             <div class="span12">
-                <div class="row">
+            
+                <% if @user : %>
+                    <% include 'pages/index/search-form.ect' %>      
+                <% end %>  
+    
+                <div class="row">                                 
                     <div class="span6">
-                        <div class="row">
-                            <% if @user : %>
-                                <div class="span6">
-                                    <% include 'pages/index/search-list.ect' %>
-                                </div>    
-                            <% end %>
-                            <div class="span6">
-                                <% include 'pages/index/upcoming-list.ect' %>
-                            </div>
-                        </div>  
+                        <% if @user : %>
+                            <% include 'pages/index/search-list.ect' %>      
+                        <% end %>         
+                        <% include 'pages/index/upcoming-list.ect' %>   
                     </div>          
                     <div class="span6"> 
                         <% include 'pages/index/watch-list.ect' %>
