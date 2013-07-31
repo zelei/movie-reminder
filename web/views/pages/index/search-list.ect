@@ -1,11 +1,11 @@
 <div ng-controller="SearchListWebController">
                      
-    <h3 ng-cloak ng-show="movies.length != 0 || query.length != 0">
+    <h3 ng-cloak ng-show="movies.length != 0 || noResult">
         <span ng-click="loadData()">SEARCH LIST</span>
         <span ng-show="searching" ng-cloak>...</span> 
     </h3> 
     
-    <span ng-cloak ng-show="movies.length == 0 && query.length != 0 && !searching">No result.</span>
+    <span ng-cloak ng-show="movies.length == 0 && noResult && !searching">No result.</span>
     
     <ul class="unstyled movie-list" ng-cloak>
         <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in movies">
