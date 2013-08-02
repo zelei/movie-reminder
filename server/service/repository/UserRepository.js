@@ -40,6 +40,7 @@ var UserRepository = function() {
         var user = {"id": userId, "name": userName, "accessToken": accessToken};
               
         User.findOneAndUpdate(query, user, options, function(err, user) {
+            console.log(err, user);
             WhenUtil.call(deferred, err, {'id' : user.id, 'name' : user.name, 'accessToken': accessToken, 'calendarId' : user.calendarId});
         });
         
