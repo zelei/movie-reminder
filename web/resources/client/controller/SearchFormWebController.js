@@ -15,19 +15,19 @@ function SearchFormWebController($rootScope, $scope, movieService, _) {
    
     $scope.clear = function() {
         $scope.query = '';
-        $rootScope.$broadcast('searchform-clear');   
+        $rootScope.$broadcast('searchform-cleared');   
     };
     
     $scope.search = function() {
         
         if(!$scope.query) {
-            $rootScope.$broadcast('searchform-clear');
+            $rootScope.$broadcast('searchform-cleared');
             return;
         }
         
         startSearching();     
         movieService.search($scope.query).then(function(movies) {
-           $rootScope.$broadcast('searchform-result', movies);
+           $rootScope.$broadcast('searchform-result-returned', movies);
         }).then(stopSearching);
 
     };

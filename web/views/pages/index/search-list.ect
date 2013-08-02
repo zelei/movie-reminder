@@ -1,10 +1,5 @@
 <div ng-controller="SearchListWebController">
-                     
-    <h3 ng-cloak ng-show="movies.length != 0 || noResult">
-        <span ng-click="loadData()">SEARCH LIST</span>
-        <span ng-show="searching" ng-cloak>...</span> 
-    </h3> 
-    
+                         
     <span ng-cloak ng-show="movies.length == 0 && noResult && !searching">No result.</span>
     
     <ul class="unstyled movie-list" ng-cloak>
@@ -19,12 +14,15 @@
                     <% end %>                          
                 </h4>
                 <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>           
-                <div>
-                    <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
-                </div>
+                <span ng-repeat="link in movie.links">
+                    <a href="{{link.url}}" target="_blank">{{link.name}}</a>
+                    <span ng-show="!$last">/</span>
+                </span>
                 <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
             </div>
         </li>    
     </ul>
 
+    <hr ng-cloak ng-show="movies.length != 0" >
+    
 </div> 

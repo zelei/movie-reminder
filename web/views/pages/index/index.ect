@@ -2,11 +2,6 @@
 
 <% block 'javascript' : %>
 
-    <script type="text/ng-template" id="share-movies-template.html">
-        <img src="https://www.gstatic.com/images/icons/gplus-16.png" />
-        <img src="https://profile-a.xx.fbcdn.net/hprofile-prn2/188045_20531316728_499936717_q.jpg" style="width: 16px; height: 16px" />
-    </script>
-
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
 
@@ -37,14 +32,11 @@
          
         <div class="row">
             <div class="span12">
-            
-                <% if @user : %>
-                    <% include 'pages/index/search-form.ect' %>      
-                <% end %>  
-    
+                
                 <div class="row">                                 
                     <div class="span6">
-                        <% if @user : %>
+                        <% if @user : %>                    
+                            <% include 'pages/index/search-form.ect' %>  
                             <% include 'pages/index/search-list.ect' %>      
                         <% end %>         
                         <% include 'pages/index/upcoming-list.ect' %>   

@@ -15,9 +15,10 @@
                     <% end %>                          
                 </h4>
                 <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>
-                <div>
-                    <a href="{{link.url}}" ng-repeat="link in movie.links" target="_blank">{{link.name}}&nbsp;</a>
-                </div>
+                <span ng-repeat="link in movie.links">
+                    <a href="{{link.url}}" target="_blank">{{link.name}}</a>
+                    <span ng-show="!$last">/</span>
+                </span>
                 <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
             </div>
         </li> 

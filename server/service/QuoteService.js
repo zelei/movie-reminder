@@ -1,7 +1,10 @@
+var env = require("rekuire")("env");
 var when = require("when");
+var fs = require('fs');
 var cache = require('memory-cache');
+var csv = require('csv');
 
-var QuoteService = function(){
+var QuoteService = function(resourceFile){
 
     this.getRandomQuote = function() {
         
@@ -17,26 +20,36 @@ var QuoteService = function(){
     };
     
     this.loadDataFromGoogleSheet = function() {
-        
+    
         var deferred = when.defer();
-        
-        var quotes = [];
-        
-        quotes.push({text : 'Toto, I\'ve got a feeling we\'re not in Kansas anymore.', character: 'Dorothy Gale', movie: 'The Wizard of Oz'});  
-        quotes.push({text : 'Here\'s looking at you, kid.', character: 'Rick Blaine', movie: 'Casablanca'});
-        quotes.push({text : 'Go ahead, make my day.', character: 'Harry Callahan', movie: 'Sudden Impact'});
-        quotes.push({text : 'All right, Mr. DeMille, I\'m ready for my close-up.', character: 'Norma Desmond', movie: 'Sunset Boulevard'});
-        quotes.push({text : 'May the Force be with you.', character: 'Han Solo', movie: 'Star Wars'});
-        quotes.push({text : 'Fasten your seatbelts. It\'s going to be a bumpy night.', character: 'Margo Channing', movie: 'All About Eve'});
-        quotes.push({text : 'You talkin\' to me?', character: '	Travis Bickle', movie: 'Taxi Driver'});
-        quotes.push({text : 'I love the smell of napalm in the morning.', character: 'Lt. Col. Bill Kilgore', movie: 'Apocalypse Now'});
-
-        deferred.resolve(quotes);
+    
+        if(getFromCache()) {
+            deferred.resolve(getFromCache());    
+        } else {
+            csv()
+            .from.stream(fs.createReadStream(resourceFile))
+            .to.array(function(quotes) {
+                deferred.resolve(putIntoCache(quotes));
+            }).transform(convertRowToQuote);
+        }
                    
         return deferred.promise;
         
     };
     
+    function convertRowToQuote(row){
+        return {text : row[0], character: row[1], movie: row[2]};
+    }
+    
+    function putIntoCache(quotes) {
+        cache.put("quotes", quotes);
+        return quotes;    
+    }
+    
+    function getFromCache() {
+        return cache.get('quotes');
+    }
+    
 };
 
-module.exports = new QuoteService();
+module.exports = new QuoteService(env.root+'/server/resources/quotes.csv');

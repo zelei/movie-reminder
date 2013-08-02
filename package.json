@@ -7,14 +7,17 @@
     "email": "sandor.zelei@gmail.com"
   },
   "dependencies": {
-    "express": "3.3.3",
+    "csv": "0.3.5",
     "ect": "0.5.2",
-    "rekuire": "0.0.10",
+    "express": "3.3.3",
     "memory-cache": "0.0.5",
-    "winston": "0.7.2",
-    "when": "2.2.1",
+    "mongoose": "3.6.14",    
     "passport": "0.1.17",
-    "passport-google": "0.3.0"
+    "passport-google-oauth": "0.1.5"
+    "rekuire": "0.0.10",
+    "request": "2.25.0",
+    "when": "2.2.1",
+    "winston": "0.7.2",
   },
   "scripts": {
     "start": "node ./server"
