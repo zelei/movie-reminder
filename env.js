@@ -8,6 +8,12 @@ var cloud9Evn = {
     ,   'port': process.env.PORT
     ,   'ip': process.env.IP
     ,   'require' : loadModule
+    ,   'mongo' : {
+            'user' : undefined
+        ,   'password' : undefined
+        ,   'name' : 'data'
+        ,   'url' : process.env.IP
+    }
 };
 
 var rhcloudEvn = {
@@ -16,6 +22,12 @@ var rhcloudEvn = {
     ,   'port': process.env.OPENSHIFT_NODEJS_PORT
     ,   'ip': process.env.OPENSHIFT_NODEJS_IP
     ,   'require' : loadModule
+    ,   'mongo' : {
+            'user' : 'admin'
+        ,   'password' : 'NpNr6_zw45vs'
+        ,   'name' : 'moviereminder'
+        ,   'url' : process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT
+    }
 };
 
 if(process.env.PORT && process.env.IP) {
