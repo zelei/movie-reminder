@@ -22,7 +22,7 @@ var cloud9Evn = {
 
 var rhcloudEvn = {
         'root': __dirname
-    ,   'host': 'http://moviereminder-node473140783608.rhcloud.com/'
+    ,   'host': 'http://moviereminder-node473140783608.rhcloud.com'
     ,   'port': process.env.OPENSHIFT_NODEJS_PORT
     ,   'ip': process.env.OPENSHIFT_NODEJS_IP
     ,   'require' : loadModule
