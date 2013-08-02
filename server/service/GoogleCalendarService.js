@@ -2,7 +2,7 @@ var when = require("when");
 var logger = require('winston');
 var request = require('request');
 
-var GoogleCalendarService = function(sheetKey){
+var GoogleCalendarService = function(){
 
     this.createNewCalendar = function(accessToken, name) {
         
@@ -74,4 +74,4 @@ var GoogleCalendarService = function(sheetKey){
     
 };
 
-module.exports = new GoogleCalendarService("g2s78atyq2725dc65zau9cyv");
+module.exports = new GoogleCalendarService();

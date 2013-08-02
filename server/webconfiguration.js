@@ -35,8 +35,8 @@ app.configure(function() {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: "678201232526.apps.googleusercontent.com",
-    clientSecret: "B6Cgp--Ne_MXhxOC8ak_-0au",
+    clientID: env.google.clientID,
+    clientSecret: env.google.clientSecret,
     callbackURL: env.host + "/auth/google/callback"
   }, SignInService.signIn));
 

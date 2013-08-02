@@ -8,6 +8,10 @@ var cloud9Evn = {
     ,   'port': process.env.PORT
     ,   'ip': process.env.IP
     ,   'require' : loadModule
+    ,   'google' :  {
+            'clientID' : "678201232526.apps.googleusercontent.com"
+        ,   'clientSecret' : "B6Cgp--Ne_MXhxOC8ak_-0au"    
+    }
     ,   'mongo' : {
             'user' : undefined
         ,   'password' : undefined
@@ -22,6 +26,10 @@ var rhcloudEvn = {
     ,   'port': process.env.OPENSHIFT_NODEJS_PORT
     ,   'ip': process.env.OPENSHIFT_NODEJS_IP
     ,   'require' : loadModule
+    ,   'google' :  {
+            'clientID' : "212275809096.apps.googleusercontent.com"
+        ,   'clientSecret' : "aPv0xBH3Acre6WTbU4lmbQ4c"    
+    }
     ,   'mongo' : {
             'user' : 'admin'
         ,   'password' : 'NpNr6_zw45vs'
