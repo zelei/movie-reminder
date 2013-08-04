@@ -56,26 +56,27 @@ var MovieService = function(apiKey){
     };
     
     this.listUpcoming = function() {
-        var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
-        
-        var deferred = when.defer();
         
         if(cache.get('listUpcoming')) {
-            deferred.resolve(cache.get('listUpcoming'));
-        } else {
-            
-            var putIntoCache = function(cacheableData) {
-                winston.info("put value into cache");
-                cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
-                return cacheableData;
-            };
-            
-            callApi(url)
-                .then(convertMovieToBriefDescription)
-                .then(sortByReleaseDate)
-                .then(putIntoCache)
-                .then(deferred.resolve, deferred.reject);
+            return when.resolve(cache.get('listUpcoming')); 
         }
+
+        var deferred = when.defer();
+        
+        var putIntoCache = function(cacheableData) {
+            winston.info("put value into cache");
+            cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
+            return cacheableData;
+        };
+
+        var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
+        
+        callApi(url)
+            .then(convertMovieToBriefDescription)
+            .then(sortByReleaseDate)
+            .then(putIntoCache)
+            .then(deferred.resolve, deferred.reject);
+        
         
         return deferred.promise;
         

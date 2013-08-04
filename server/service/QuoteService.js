@@ -21,20 +21,20 @@ var QuoteService = function(resourceFile){
     
     this.loadDataFromGoogleSheet = function() {
     
-        var deferred = when.defer();
-    
         if(getFromCache()) {
-            deferred.resolve(getFromCache());    
-        } else {
-            csv()
-            .from.stream(fs.createReadStream(resourceFile))
-            .to.array(function(quotes) {
-                deferred.resolve(putIntoCache(quotes));
-            }).transform(convertRowToQuote);
-        }
-                   
-        return deferred.promise;
+            return when.resolve(getFromCache());
+        } 
         
+        var deferred = when.defer();
+        
+        csv()
+        .from.stream(fs.createReadStream(resourceFile))
+        .to.array(function(quotes) {
+            deferred.resolve(putIntoCache(quotes));
+        }).transform(convertRowToQuote);
+        
+        return deferred.promise;
+    
     };
     
     function convertRowToQuote(row){
