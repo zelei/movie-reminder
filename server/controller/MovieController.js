@@ -9,7 +9,8 @@ var Controller = function() {
             
         quoteService.getRandomQuote().then(
               function(quote) {res.json(quote)}
-            , function(err) {res.json(500, err)});
+            , function(err) {res.json(500, err)}
+        );
     
     };
     
