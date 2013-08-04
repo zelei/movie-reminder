@@ -20,12 +20,21 @@ app.configure(function() {
 
   // Express
   app.use(express.compress());
-  app.use("/static", express.static(env.root + '/web/resources', { maxAge: 86400000 }));
- // app.use(express.logger());
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use("/static", express.static(env.root + '/web/resources', { maxAge: 1000*60*60*24*30*12  }));
+  app.use(express.logger());
 
   app.use(express.cookieParser());
   app.use(express.bodyParser());
-  app.use(express.session({ secret: 'keyboard cat' }));
+  
+  app.use(express.session({   
+      secret: 'SOMETHING_REALLY_HARD_TO_GUESS',   
+      cookie: {  
+        path     : '/',  
+        maxAge   : 1000*60*60*24*30*12    //one year(ish)  
+      }   
+    }));
+
   
   // Passport
   app.use(passport.initialize());

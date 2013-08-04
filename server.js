@@ -4,10 +4,11 @@ var passport = require('passport');
 var context = require("rekuire")("webconfiguration");
 var env = require("rekuire")("env");
 
+var indexController = env.require("/server/controller/IndexController").getInstance();
 var movieController = env.require("/server/controller/MovieController").getInstance();
 var searchController = env.require("/server/controller/SearchController").getInstance();
 
-context.app.get('/', env.require("/server/controller/IndexController"));
+context.app.get('/', indexController.index);
 
 context.app.get('/movie/search', searchController.search);
 
