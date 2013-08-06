@@ -41,4 +41,4 @@ var movieService = function($http, $q) {
 };
 
 // returns the actual function
-app.service( 'movieService', movieService );
+app.service( 'movieService', movieService);

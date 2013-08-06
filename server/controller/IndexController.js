@@ -4,7 +4,7 @@ var FileUtil = env.require("/server/util/FileUtil");
 FileUtil.concat({
     src : [
         '/web/resources/client/service/Application.js',
-        '/web/resources/client/service/MovieService.js',
+        '/web/resources/client/service/MovieWebService.js',
         '/web/resources/client/controller/QuoteWebController.js',
         '/web/resources/client/controller/SearchListWebController.js',
         '/web/resources/client/controller/SearchFormWebController.js',

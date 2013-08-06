@@ -1,25 +1,22 @@
 var env = require("rekuire")("env");
-var WhenUtil = env.require("/server/util/WhenUtil");
-var request = require('request');
 var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
 
+var movieDataProvider = env.require("/server/service/RottenTomatoesDataProvider");
 var UserRepository = env.require("/server/service/repository/UserRepository");
 
 var Movie = env.require("/server/model/Movie");
-var Link = env.require("/server/model/Link");
 
-var MovieService = function(apiKey){
+var MovieService = function(dataProvider){
 
-    this.apiKey = apiKey;
+    this.dataProvider = dataProvider;
 
     this.search = function(query, userId) {
-        var url = '/api/public/v1.0/movies.json?apikey=' + this.apiKey + '&q=' + encodeURIComponent(query);
-        
+       
         var deferred = when.defer();
         
-        when.join(callApi(url).then(convertMovieToBriefDescription), UserRepository.findById(userId))
+        when.join(this.dataProvider.search(query), UserRepository.findById(userId))
             .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
             .then(sortByReleaseDate)
             .then(deferred.resolve, deferred.reject);
@@ -33,11 +30,7 @@ var MovieService = function(apiKey){
         var deferred = when.defer();
         
         UserRepository.findById(userId).then(function(user) {
-            return when.all(user.selectedMovies.map(function(selectedMovie) {
-                return callApi('/api/public/v1.0/movies/'+selectedMovie.movieId+'.json?apikey=' + apiKey);
-            }));
-        }).then(function(movies){
-            return convertMovieToBriefDescription({'total' : movies.length, 'movies' : movies});
+            return when.all(user.selectedMovies.map(dataProvider.getMovieDetails));
         }).then(sortByReleaseDate).then(deferred.resolve, deferred.reject);
             
         return deferred.promise;        
@@ -68,11 +61,8 @@ var MovieService = function(apiKey){
             cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
             return cacheableData;
         };
-
-        var url = '/api/public/v1.0/lists/movies/upcoming.json?apikey=' + this.apiKey + '&page_limit=50&page=1&country=us';
         
-        callApi(url)
-            .then(convertMovieToBriefDescription)
+        this.dataProvider.getUpcomingMovies()
             .then(sortByReleaseDate)
             .then(putIntoCache)
             .then(deferred.resolve, deferred.reject);
@@ -81,17 +71,6 @@ var MovieService = function(apiKey){
         return deferred.promise;
         
     };
-    
-    function callApi(url) {
-        
-        var deferred = when.defer();
-                
-        request.get({url : "http://api.rottentomatoes.com" + url, json: true}, function (error, response, body) {
-            WhenUtil.call(deferred, error, body);
-        });  
-        
-        return deferred.promise;
-    }
     
     function markSelectedMovies(movies, selectedMovies) {
         
@@ -115,32 +94,6 @@ var MovieService = function(apiKey){
         return movies;
     }
     
-    function convertMovieToBriefDescription(moviesData) {                  
-
-        if(moviesData.total === 0) {
-            return [];
-        }
-        
-        return moviesData.movies.map(function(movie) {
-                var links = [];            
-                if(movie.links && movie.links.alternate) {
-                    links.push(new Link("rottentomatoes", movie.links.alternate));
-                }
-            
-                if(movie.alternate_ids && movie.alternate_ids.imdb) {
-                    links.push(new Link("imdb", 'http://www.imdb.com/title/tt' + movie.alternate_ids.imdb));
-                }
-            
-                return new Movie( 
-                          String(movie.id)
-                        , movie.title
-                        , movie.posters.thumbnail
-                        , movie.synopsis
-                        , movie.release_dates.theater
-                        , links)});
-
-    }
-    
 };
 
-module.exports = new MovieService("g2s78atyq2725dc65zau9cyv");
+module.exports = new MovieService(movieDataProvider);

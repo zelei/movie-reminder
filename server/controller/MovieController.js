@@ -1,5 +1,5 @@
 var env = require("rekuire")("env");
-var movieService = env.require("/server/service/RottenTomatoesMovieService");
+var movieService = env.require("/server/service/MovieService");
 var quoteService = env.require("/server/service/QuoteService");
 var userService = env.require("/server/service/UserService");
 
