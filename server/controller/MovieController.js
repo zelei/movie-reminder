@@ -27,6 +27,20 @@ var Controller = function() {
             );
     
     };
+
+    this.topmovies = function(req, res){
+       
+        var userId;
+        if(req.user) {
+            userId = req.user.id;
+        }
+       
+        movieService.getTopSelectedMovies(userId).then(
+              function(movies) {res.json(movies)}
+            , function(err) {res.json(500, err)}
+        );
+    
+    };
     
     this.upcoming = function(req, res){
     
@@ -37,7 +51,7 @@ var Controller = function() {
         } else {
             listFunction = movieService.listUpcoming();
         }
-        
+                
         listFunction.then(
               function(movies) {res.json(movies)}
             , function(err) {res.json(500, err)}

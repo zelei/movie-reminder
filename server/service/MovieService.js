@@ -24,13 +24,33 @@ var MovieService = function(dataProvider){
         return deferred.promise;
         
     };
+
+    this.getTopSelectedMovies = function(userId) {
+        
+        var deferred = when.defer();
+        
+        var selectedMovies = UserRepository.getTopSelectedMovies().then(function(movies) {
+            return when.all(movies.map(dataProvider.getMovieDetails));
+        });
+        
+        if(!userId) {
+            selectedMovies.then(deferred.resolve, deferred.reject);
+        } else {   
+            when.join(selectedMovies, UserRepository.findById(userId))
+                .then(function(joinedData) {return markSelectedMovies(joinedData[0], joinedData[1].selectedMovies);})
+                .then(deferred.resolve, function(err) {console.log(err); deferred.reject(err);});
+        }        
+                
+        return deferred.promise;        
+    };
     
     this.listMarkedMoviesForUser = function(userId) {
         
         var deferred = when.defer();
         
         UserRepository.findById(userId).then(function(user) {
-            return when.all(user.selectedMovies.map(dataProvider.getMovieDetails));
+            var movieIds = user.selectedMovies.map(function(selectedMovie) {return selectedMovie.movieId}); 
+            return when.all(movieIds.map(dataProvider.getMovieDetails));
         }).then(sortByReleaseDate).then(deferred.resolve, deferred.reject);
             
         return deferred.promise;        

@@ -18,6 +18,8 @@ context.app.get('/movie/mymovies', movieController.myMovies);
 
 context.app.get('/movie/upcoming', movieController.upcoming);
 
+context.app.get('/movie/top', movieController.topmovies);
+
 context.app.post('/movie/mark', movieController.mark);
 
 context.app.post('/movie/unmark', movieController.unmark);

@@ -1,0 +1,26 @@
+<div ng-controller="TopMoviesWebController"> 
+    <h3>
+        <span class="pointer" ng-click="loadData()">TOP 10</span>
+        <span ng-show="loading" ng-cloak>...</span>
+    </h3>
+    <ul class="unstyled movie-list" ng-cloak>
+        <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in topMovies">
+            <div class="media">     
+        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
+        	    <h4 class="movie-title">
+                    <span>{{movie.title}}&nbsp;</span>
+                    <% if @user : %>
+                        <i ng-hide="movie.saving" ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
+                        <i ng-show="movie.saving" class="pointer icon-white icon-ban-circle"></i>        
+                    <% end %>                          
+                </h4>
+                <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>
+                <span ng-repeat="link in movie.links">
+                    <a href="{{link.url}}" target="_blank">{{link.name}}</a>
+                    <span ng-show="!$last">/</span>
+                </span>
+                <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
+            </div>
+        </li> 
+    </ul>
+</div>

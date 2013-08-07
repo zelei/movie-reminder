@@ -8,6 +8,12 @@ var movieService = function($http, $q) {
         return deferred.promise;
     };
     
+    this.listTopMovies = function() {
+        var deferred = $q.defer();      
+        $http.get('/movie/top').success(deferred.resolve).error(deferred.reject);
+        return deferred.promise;
+    };
+    
     this.search = function(query) {
         var deferred = $q.defer();      
         $http.get('/movie/search?q=' + query).success(deferred.resolve).error(deferred.reject);

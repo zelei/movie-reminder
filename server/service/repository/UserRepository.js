@@ -8,6 +8,22 @@ var SelectedMovie = env.require("/server/model/SelectedMovie");
 
 var UserRepository = function() {
 
+    this.getTopSelectedMovies = function() {
+        var deferred = when.defer();
+                           
+        User.aggregate({ $project: { selectedMovies: 1 } } 
+                     , { $unwind: '$selectedMovies' } 
+                     , { $group: {_id: '$selectedMovies.movieId' , count: { $sum: 1 } }} 
+                     , { $sort : { "count" : -1 } }
+                     , { $limit : 10 }
+                     ,  function(err, data) {
+                            var movieIds = data.map(function(selectedMovie) {return selectedMovie._id});
+                            deferred.resolve(movieIds);
+                        });
+        
+        return deferred.promise; 
+    };
+    
     this.getEventId = function(userId, movieId) {
         var deferred = when.defer();
                         
@@ -58,6 +74,7 @@ var UserRepository = function() {
     };
     
     this.findById = function(userId) {
+        
         var deferred = when.defer();
                 
         User.findOne( {'id': userId}, function(err, user) {
