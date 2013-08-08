@@ -5,7 +5,7 @@
 function QuoteWebController($rootScope, $scope, movieService) {
 
     $scope.select = function(quote) {
-        $rootScope.$broadcast('searchlist-movie-search', quote.movie);
+        $rootScope.$broadcast('search:movie-searched', quote.movie);
     };
 
     $scope.loadData = function() {

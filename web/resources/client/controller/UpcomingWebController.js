@@ -10,7 +10,7 @@ function UpcomingWebController($rootScope, $scope, movieService, _) {
 
     $scope.loading = false;
     
-    ['watchlist-selection-changed', 'searchlist-selection-changed', 'upcoming-selection-changed'].forEach(function(name) {
+    ['watchlist:selection-changed', 'searchlist:selection-changed', 'upcoming:selection-changed', 'top:selection-changed'].forEach(function(name) {
         $rootScope.$on(name, function(event, movieId) {
             $scope.upcomingMovies.forEach(function(movie) {
                 if(movie.id == movieId) {
@@ -25,7 +25,7 @@ function UpcomingWebController($rootScope, $scope, movieService, _) {
         var service = movie.selected ? movieService.unmark(movie) : movieService.mark(movie);
         
         service
-        .then(function() { $rootScope.$broadcast('upcoming-selection-changed', movie.id); })
+        .then(function() { $rootScope.$broadcast('upcoming:selection-changed', movie.id); })
         .then(function() { movie.saving = false; });  
     };
 

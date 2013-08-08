@@ -8,7 +8,7 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
    
     $scope.loading = false;
     
-    ['upcoming-selection-changed', 'searchlist-selection-changed'].forEach(function(name) {
+    ['upcoming:selection-changed', 'searchlist:selection-changed', 'top:selection-changed'].forEach(function(name) {
         $rootScope.$on(name, function(event) {
             $scope.loadData();
         }); 
@@ -18,7 +18,7 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
         movie.saving = true;
         
         movieService.unmark(movie)
-        .then(function() { $rootScope.$broadcast('watchlist-selection-changed', movie.id);})
+        .then(function() { $rootScope.$broadcast('watchlist:selection-changed', movie.id);})
         .then($scope.loadData);  
         
     };

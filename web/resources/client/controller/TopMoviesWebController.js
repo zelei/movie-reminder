@@ -10,13 +10,9 @@ function TopMoviesWebController($rootScope, $scope, movieService, _) {
 
     $scope.loading = false;
     
-    ['watchlist-selection-changed', 'searchlist-selection-changed', 'upcoming-selection-changed'].forEach(function(name) {
-        $rootScope.$on(name, function(event, movieId) {
-            $scope.upcomingMovies.forEach(function(movie) {
-                if(movie.id == movieId) {
-                    movie.selected = !movie.selected;
-                }            
-            });
+    ['watchlist:selection-changed', 'searchlist:selection-changed', 'upcoming:selection-changed'].forEach(function(name) {
+        $rootScope.$on(name, function(event, movieId) {            
+            $scope.loadData();
         }); 
     });
     
@@ -25,15 +21,16 @@ function TopMoviesWebController($rootScope, $scope, movieService, _) {
         var service = movie.selected ? movieService.unmark(movie) : movieService.mark(movie);
         
         service
-        .then(function() { $rootScope.$broadcast('upcoming-selection-changed', movie.id); })
-        .then(function() { movie.saving = false; });  
+        .then(function() { $rootScope.$broadcast('top:selection-changed', movie.id); })
+        .then(function() { movie.saving = false; })
+        .then($scope.loadData);  
     };
 
     $scope.loadData = function() {
         startLoading();
         movieService.listTopMovies().then(function(data) {
             return ($scope.topMovies = data);
-        }).then(removeUnusedIds)
+        }).then(removeUnusedIds) 
           .then(stopLoading);    
     };
     
