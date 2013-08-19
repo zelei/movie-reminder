@@ -15,7 +15,7 @@
                 </div>
         	    <h4 class="movie-title">
                     <span>{{movie.title}}</span>
-                    <a href="#upcoming-{{movie.id}}" role="button" data-toggle="modal"><i class="icon-film icon-white"></i></a>                       
+                    <a href="#upcoming-{{movie.id}}" ng-hide="movie.trailers.length == 0" role="button" data-toggle="modal"><i class="icon-film icon-white"></i></a>                       
                 </h4>
                 <div><i ng-show="movie.releaseDate">({{movie.releaseDate | date:'shortDate'}})</i></div>
                 <span ng-repeat="link in movie.links">
