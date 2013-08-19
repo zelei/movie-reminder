@@ -17,7 +17,8 @@
     "rekuire": "0.0.10",
     "request": "2.25.0",
     "when": "2.2.1",
-    "winston": "0.7.2"
+    "winston": "0.7.2",
+    "xml2js-expat": "0.2.2"
   },
   "scripts": {
     "start": "node ./server"
