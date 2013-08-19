@@ -5,6 +5,8 @@ var when = require("when");
 var cache = require('memory-cache');
 var winston = require('winston');
 
+var TrailerDataProvider = env.require("/server/service/TrailerAddictDataProvider");
+
 var Movie = env.require("/server/model/Movie");
 var Link = env.require("/server/model/Link");
 
@@ -41,38 +43,61 @@ var MovieDataProvider = function(apiKey){
     };
     
     function convertRawDataToMovies(moviesData) {                  
-
+        
         if(moviesData.total === 0) {
-            return [];
+            when.resolve([]);
         }
         
-        return moviesData.movies.map(convertRawDataToMovie);
+        var deferred = when.defer();
+
+        when.all(moviesData.movies.map(convertRawDataToMovie)).then(deferred.resolve);
+        
+        return deferred.promise;
     }
     
     
     function convertRawDataToMovie(movieData) { 
-                               
-        var links = [];            
-        if(movieData.links && movieData.links.alternate) {
-            links.push(new Link("rottentomatoes", movieData.links.alternate));
-        }
-    
-        if(movieData.alternate_ids && movieData.alternate_ids.imdb) {
-            links.push(new Link("imdb", 'http://www.imdb.com/title/tt' + movieData.alternate_ids.imdb));
-        }
+        
         try {
-            var movie = new Movie( 
+            
+            var links = [];            
+            if(movieData.links && movieData.links.alternate) {
+                links.push(new Link("rottentomatoes", movieData.links.alternate));
+            }
+        
+            if(movieData.alternate_ids && movieData.alternate_ids.imdb) {
+                links.push(new Link("imdb", 'http://www.imdb.com/title/tt' + movieData.alternate_ids.imdb));
+                
+                var deferred = when.defer();
+                TrailerDataProvider.getTrailers(movieData.alternate_ids.imdb).then(function(trailers) {
+                    return createMovie( 
+                              String(movieData.id)
+                            , movieData.title
+                            , movieData.posters.thumbnail
+                            , movieData.synopsis
+                            , movieData.release_dates.theater
+                            , links
+                            , trailers);    
+                }).then(deferred.resolve);
+                
+                return deferred.promise;
+                
+            } else {
+                          
+                return when.resolve(createMovie( 
                       String(movieData.id)
                     , movieData.title
                     , movieData.posters.thumbnail
                     , movieData.synopsis
                     , movieData.release_dates.theater
-                    , links);
+                    , links));
                     
-            return movie;        
+            }       
+            
         } catch(e) {    
-            throw "LimitException"; 
-        }        
+            return when.reject("LimitException"); 
+        }   
+        
     }
         
     function callApi(url) {
@@ -84,6 +109,17 @@ var MovieDataProvider = function(apiKey){
         });  
         
         return deferred.promise;
+    }
+    
+    function createMovie(id, title, thumbnail, synopsis, release_dates, links, trailers) {
+         return new Movie( 
+                      String(id)
+                    , title
+                    , thumbnail
+                    , synopsis
+                    , release_dates
+                    , links
+                    , trailers)    
     }
     
 };

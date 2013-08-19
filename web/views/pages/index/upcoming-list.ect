@@ -6,21 +6,42 @@
     <ul class="unstyled movie-list" ng-cloak>
         <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in upcomingMovies">
             <div class="media">     
-        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
-        	    <h4 class="movie-title">
-                    <span>{{movie.title}}&nbsp;</span>
+        		<div class="pull-left poster pointer" ng-click="select(movie)" >
+                    <img class="img-polaroid" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
                     <% if @user : %>
-                        <i ng-hide="movie.saving" ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
-                        <i ng-show="movie.saving" class="pointer icon-white icon-ban-circle"></i>        
-                    <% end %>                          
+                        <i ng-hide="movie.saving" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
+                        <i ng-show="movie.saving" class="icon-ban-circle"></i>        
+                    <% end %>   
+                </div>
+        	    <h4 class="movie-title">
+                    <span>{{movie.title}}</span>
+                    <a href="#upcoming-{{movie.id}}" role="button" data-toggle="modal"><i class="icon-film icon-white"></i></a>                       
                 </h4>
-                <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>
+                <div><i ng-show="movie.releaseDate">({{movie.releaseDate | date:'shortDate'}})</i></div>
                 <span ng-repeat="link in movie.links">
                     <a href="{{link.url}}" target="_blank">{{link.name}}</a>
                     <span ng-show="!$last">/</span>
                 </span>
                 <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
             </div>
+                 
+            <!-- Modal -->
+            <div ng-controller="TrailerWebController" id="upcoming-{{movie.id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>{{movie.title}}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="media">
+                        <p class="img-polaroid" ng-bind-html-unsafe="movie.trailers[selected].embed"></p>
+                    </div>
+                    <div class="pull-right">{{movie.trailers[selected].pubDate | date:'shortDate'}}</div>
+                    <span ng-repeat="trailer in movie.trailers" ng-show="movie.trailers.length > 1">
+                        <button title="Publish date: {{movie.trailers[selected].pubDate | date:'shortDate'}}" class="btn btn-mini btn-info" ng-class="{'disabled': isDisabled($index)}" ng-disabled="isDisabled($index)" type="button" ng-click="select($index)">#{{$index + 1}}</button>
+                    </span>
+                </div>
+            </div>
+
         </li> 
     </ul>
 </div>

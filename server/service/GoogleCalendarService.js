@@ -36,10 +36,12 @@ var GoogleCalendarService = function(){
         };
     
         var uri = "https://www.googleapis.com/calendar/v3/calendars/"+calendarId+"/events?access_token=" + accessToken;
+        
+        var releaseDate = fomatDate(new Date(movie.releaseDate));
         var body = {"summary": movie.title
                   , "description": movie.synopsis 
-                  , "start": {"date": movie.releaseDate}
-                  , "end": {"date": movie.releaseDate}
+                  , "start": {"date": releaseDate}
+                  , "end": {"date": releaseDate}
                   , "transparency": "transparent"
                   , "reminders": { 
                           "useDefault": false
@@ -71,6 +73,10 @@ var GoogleCalendarService = function(){
         
         return deferred.promise; 
     };
+    
+    function fomatDate(date) {
+        return date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
+    }
     
 };
 

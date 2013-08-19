@@ -12,7 +12,8 @@ FileUtil.concat({
         '/web/resources/client/controller/SearchFormWebController.js',
         '/web/resources/client/controller/UpcomingWebController.js',
         '/web/resources/client/controller/WatchListWebController.js',
-        '/web/resources/client/controller/TopMoviesWebController.js'
+        '/web/resources/client/controller/TopMoviesWebController.js',
+        '/web/resources/client/controller/TrailerWebController.js'
     ],
     dest : '/web/resources/generated/' + generatedFileName
 });

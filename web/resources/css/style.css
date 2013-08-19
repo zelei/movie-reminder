@@ -20,6 +20,22 @@ li {
     margin-top: 5px;    
 }
 
+.close {
+    opacity: 0.8;
+    color: white;
+}
+
+.poster {
+    position: relative;    
+}
+
+.poster i {
+    position: absolute; 
+    right: 3px; 
+    bottom: 4px;
+    background-color: white;
+}
+
 .movie-list .movie-title {
     max-width: 450px;
 }

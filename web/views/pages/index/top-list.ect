@@ -6,15 +6,17 @@
     <ul class="unstyled movie-list" ng-cloak>
         <li class="movie" ng-class="{selected: movie.selected}" ng-repeat="movie in topMovies">
             <div class="media">     
-        		<img class="img-polaroid pull-left" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
-        	    <h4 class="movie-title">
-                    <span>{{movie.title}}&nbsp;</span>
+            	<div class="pull-left poster pointer" ng-click="select(movie)" >
+                    <img class="img-polaroid" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
                     <% if @user : %>
-                        <i ng-hide="movie.saving" ng-click="select(movie)" class="pointer icon-white" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
-                        <i ng-show="movie.saving" class="pointer icon-white icon-ban-circle"></i>        
-                    <% end %>                          
+                        <i ng-hide="movie.saving" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
+                        <i ng-show="movie.saving" class="icon-ban-circle"></i>        
+                    <% end %>   
+                </div>
+        	    <h4 class="movie-title">
+                    <span>{{movie.title}}&nbsp;</span>                         
                 </h4>
-                <div><i ng-show="movie.releaseDate">({{movie.releaseDate}})</i></div>
+                <div><i ng-show="movie.releaseDate">({{movie.releaseDate | date:'shortDate'}})</i></div>
                 <span ng-repeat="link in movie.links">
                     <a href="{{link.url}}" target="_blank">{{link.name}}</a>
                     <span ng-show="!$last">/</span>
