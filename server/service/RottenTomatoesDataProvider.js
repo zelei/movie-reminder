@@ -27,7 +27,7 @@ var MovieDataProvider = function(apiKey){
     this.getMovieDetails = function(movieId) {
         
         if(cache.get("movie#" + movieId)) {
-            winston.info("From cache: movie#%s", movieId);
+            winston.info("From cache: movie#", movieId);
             return when.resolve(cache.get("movie#" + movieId));
         }
         
