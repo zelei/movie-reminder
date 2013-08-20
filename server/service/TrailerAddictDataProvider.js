@@ -11,7 +11,7 @@ var TrailerAddictDataProvider = function(){
         
         var deferred = when.defer();
         
-        request.get({url : "http://api.traileraddict.com/?imdb=" + imdbId + "&count=6&width=520"}, function (error, response, body) {
+        request.get({url : "http://api.traileraddict.com/?imdb=" + imdbId + "&count=6&width=520"}, function (error, response, body) {           
             error ? deferred.reject(error) : parseXml(body).then(deferred.resolve, deferred.reject);    
         });
         

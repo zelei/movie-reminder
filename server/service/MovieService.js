@@ -1,6 +1,5 @@
 var env = require("rekuire")("env");
 var when = require("when");
-var cache = require('memory-cache');
 var winston = require('winston');
 
 var movieDataProvider = env.require("/server/service/RottenTomatoesDataProvider");
@@ -69,27 +68,7 @@ var MovieService = function(dataProvider){
     };
     
     this.listUpcoming = function() {
-        
-        if(cache.get('listUpcoming')) {
-            return when.resolve(cache.get('listUpcoming')); 
-        }
-
-        var deferred = when.defer();
-        
-        var putIntoCache = function(cacheableData) {
-            winston.info("put value into cache");
-            cache.put('listUpcoming', cacheableData, 1000 * 60 * 60 * 1); // 1h
-            return cacheableData;
-        };
-        
-        this.dataProvider.getUpcomingMovies()
-            .then(sortByReleaseDate)
-            .then(putIntoCache)
-            .then(deferred.resolve, deferred.reject);
-        
-        
-        return deferred.promise;
-        
+        return this.dataProvider.getUpcomingMovies().then(sortByReleaseDate);        
     };
     
     function markSelectedMovies(movies, selectedMovies) {
