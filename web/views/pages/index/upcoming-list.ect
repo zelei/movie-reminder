@@ -35,7 +35,7 @@
                     <div class="media">
                         <p class="img-polaroid" ng-bind-html-unsafe="movie.trailers[selected].embed"></p>
                     </div>
-                    <div class="pull-right">{{movie.trailers[selected].pubDate | date:'shortDate'}}</div>
+                    <div class="pull-right">Publish date: {{movie.trailers[selected].pubDate | date:'shortDate'}}</div>
                     <span ng-repeat="trailer in movie.trailers" ng-show="movie.trailers.length > 1">
                         <button title="Publish date: {{movie.trailers[selected].pubDate | date:'shortDate'}}" class="btn btn-mini btn-info" ng-class="{'disabled': isDisabled($index)}" ng-disabled="isDisabled($index)" type="button" ng-click="select($index)">#{{$index + 1}}</button>
                     </span>

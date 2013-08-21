@@ -32,7 +32,7 @@ var MovieDataProvider = function(apiKey){
             return cacheableData;
         };
         
-        winston.info("Load upcoming movies from rottentomatoes")
+        winston.info("Load upcoming movies from rottentomatoes");
         return callApi('/api/public/v1.0/lists/movies/upcoming.json?apikey=' + apiKey + '&page_limit=50&page=1&country=us')
                 .then(convertRawDataToMovies)
                 .then(putMoviesIntoCache)
@@ -54,14 +54,14 @@ var MovieDataProvider = function(apiKey){
     function putMoviesIntoCache(cacheableMovies) {
         cacheableMovies.forEach(putMovieIntoCache);
         return cacheableMovies;
-    };
+    }
 
     function putMovieIntoCache(cacheableMovie) {
         var expTime = 1000 * 60 * 60 * 1 + getRandomNumber(5, 20) * 60;
         winston.info("Put movie into cache: movie#%s - expTime:%d", cacheableMovie.id, expTime);
         cache.put("movie#" + cacheableMovie.id, cacheableMovie, expTime); // 1h + 5-20m
         return cacheableMovie;
-    };
+    }
 
     function convertRawDataToMovies(moviesData) {                  
                 
@@ -112,7 +112,7 @@ var MovieDataProvider = function(apiKey){
                 return deferred.promise;
                 
             } else {
-                winston.info("Create movie without trailers")          
+                winston.info("Create movie without trailers");          
                 return when.resolve(createMovie( 
                       String(movieData.id)
                     , movieData.title
@@ -124,8 +124,7 @@ var MovieDataProvider = function(apiKey){
             }       
             
         } catch(e) {
-            winston.info(e);
-            return when.reject({type: "LimitException", exception: e}); 
+            return when.reject(e); 
         }   
         
     }
@@ -149,7 +148,7 @@ var MovieDataProvider = function(apiKey){
                     , synopsis
                     , release_dates
                     , links
-                    , trailers)    
+                    , trailers);    
     }
      
     function getRandomNumber(from, to) {
