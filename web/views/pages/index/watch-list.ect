@@ -16,7 +16,7 @@
                 	<div class="pull-left poster pointer" ng-click="select(movie)" >
                         <img class="img-polaroid" ng-src="{{movie.thumbnail}}" style="width: 61px; height: 91px;">
                         <% if @user : %>
-                            <i ng-hide="movie.saving" ng-class="{'icon-minus': movie.selected, 'icon-plus': !movie.selected}"></i>
+                            <i ng-hide="movie.saving" class="icon-minus"></i>
                             <i ng-show="movie.saving" class="icon-ban-circle"></i>        
                         <% end %>   
                     </div>
@@ -32,6 +32,8 @@
                     <read synopsis="{{movie.synopsis}}" key="{{movie.id}}" key-store="$parent.openedDescription"></read>
                 </div>
                 
+                <hr title="Outgoing" ng-show="movie.lastOutgoing && !$last" class="lastOutgoing">
+
                 <!-- Modal -->
                 <div ng-controller="TrailerWebController" id="watch-{{movie.id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-header">

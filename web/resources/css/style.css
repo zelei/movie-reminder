@@ -49,16 +49,8 @@ li {
     padding-left: 4px;
 }
 
-.movie-list .movie.selected {
-    border-left: 3px solid #fff;
-}
-
 .movie-list .movie.selected h4 {
     font-weight: bold;
-}
-
-.movie-list .movie:HOVER {
-    border-color: #999;
 }
 
 .input-prepend.input-block-level {
@@ -78,7 +70,6 @@ li {
     width: 100%;
     border-left-style: none;
 }
-
 
 .form-search .input-append .add-on:last-child {
     border-radius: 0 15px 15px 0;
@@ -101,3 +92,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
     margin-bottom: 3px;
 }
 
+.movie-list .movie .lastOutgoing {
+    width: 80%;
+    border-bottom: 3px solid gray;
+}

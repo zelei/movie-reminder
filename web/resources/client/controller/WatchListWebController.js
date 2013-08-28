@@ -9,7 +9,7 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
     $scope.loading = false;
     
     ['upcoming:selection-changed', 'searchlist:selection-changed', 'top:selection-changed'].forEach(function(name) {
-        $rootScope.$on(name, function(event) {
+        $rootScope.$on(name, function() {
             $scope.loadData();
         }); 
     });
@@ -27,11 +27,29 @@ function WatchListWebController($rootScope, $scope, movieService, _) {
         startLoading();
         
         movieService.listMyMovies()
-        .then(function(data) { return ($scope.movies = data);})
+        .then(setMovies)
+        .then(markSetLastOutgoing)
         .then(removeUnusedIds)
         .then(stopLoading);
         
     };
+
+    function setMovies(data) {
+        $scope.movies = data;
+        return $scope.movies;
+    }
+
+    function markSetLastOutgoing(data) {
+        var lastMovie = _.last(_.filter(data, function(movie) {
+            return new Date(movie.releaseDate) <= new Date(); 
+        }));
+        
+        if(lastMovie) {
+            lastMovie.lastOutgoing = true;
+        }
+        
+        return data;
+    }
 
     function startLoading() {
       $scope.loading = true;  
